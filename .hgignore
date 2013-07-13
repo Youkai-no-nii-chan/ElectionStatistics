@@ -1,0 +1,16 @@
+syntax: glob
+*.suo
+*.bin
+*.dat
+*.version
+*.crc
+bin
+Bin
+obj
+*.orig
+_ReSharper.*
+*.log
+*.user
+*.psess
+*.vsp
+packages
