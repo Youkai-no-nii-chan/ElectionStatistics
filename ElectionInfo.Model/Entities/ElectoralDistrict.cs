@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ElectionInfo.Model.Entities
+namespace ElectionInfo.Model
 {
     public class ElectoralDistrict
     {
@@ -13,5 +13,8 @@ namespace ElectionInfo.Model.Entities
 
         public int? HigherDistrictId { get; set; }
         public virtual ElectoralDistrict HigherDistrict { get; set; }
+
+        [Column(TypeName = "varchar"), StringLength(100)]
+        public string HierarchyPath { get; set; }
     }
 }
