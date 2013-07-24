@@ -1,15 +1,17 @@
 ﻿using System.Data.Entity;
-using System.Data.SqlClient;
-using ElectionInfo.Model.Entities;
 
 namespace ElectionInfo.Model
 {
     public class ModelContext : DbContext
     {
-        public ModelContext(string connectionString)
-            : base(new SqlConnection(connectionString), true)
+        public ModelContext() : base("ModelContext")
         {
+            CandidatesRepository = new CandidatesRepository(this);
+            ElectoralDistrictsRepository = new ElectoralDistrictsRepository(this);
         }
+
+        public CandidatesRepository CandidatesRepository { get; private set; }
+        public ElectoralDistrictsRepository ElectoralDistrictsRepository { get; private set; }
 
         public DbSet<Candidate> Candidates
         {

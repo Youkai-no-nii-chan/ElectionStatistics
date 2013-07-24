@@ -2,7 +2,7 @@
 
 namespace ElectionInfo.Model.Migrations
 {
-    public class DatabaseInitializer : MigrateDatabaseToLatestVersion<ModelContext, MigrationsConfiguration>
+    internal sealed class DatabaseInitializer : MigrateDatabaseToLatestVersion<ModelContext, MigrationsConfiguration>
     {
          
     }

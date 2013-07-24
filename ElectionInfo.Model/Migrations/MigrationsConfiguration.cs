@@ -2,7 +2,7 @@
 
 namespace ElectionInfo.Model.Migrations
 {
-    public class MigrationsConfiguration : DbMigrationsConfiguration<ModelContext>
+    internal sealed class MigrationsConfiguration : DbMigrationsConfiguration<ModelContext>
     {
         public MigrationsConfiguration()
         {
