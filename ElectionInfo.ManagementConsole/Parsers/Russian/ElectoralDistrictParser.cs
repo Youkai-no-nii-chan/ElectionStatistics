@@ -73,23 +73,8 @@ namespace ElectionInfo.ManagementConsole
                 districtName = latestLine.GetTagValue("td");
             }
 
-            District = Context.ElectoralDistrictsRepository.GetOrCreate(districtName, HigherDistrict);
-
-            DistrictElection = Context.ElectoralDistrictElection.SingleOrDefault(
-                subRegionElection =>
-                subRegionElection.ElectionId == Election.Id &&
-                subRegionElection.ElectoralDistrictId == District.Id);
-
-            if (DistrictElection == null)
-            {
-                DistrictElection = new ElectoralDistrictElection
-                {
-                    Election = Election,
-                    ElectoralDistrict = District,
-                    DataSourceUrl = Url
-                };
-                Context.ElectoralDistrictElection.Add(DistrictElection);
-            }
+            District = Context.ElectoralDistricts.GetOrAdd(districtName, HigherDistrict);
+            DistrictElection = Context.ElectoralDistrictElection.GetOrAdd(Election, District, Url);
 
             Context.SaveChanges();
         }

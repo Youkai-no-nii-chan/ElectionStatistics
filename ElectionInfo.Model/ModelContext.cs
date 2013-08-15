@@ -6,41 +6,51 @@ namespace ElectionInfo.Model
     {
         public ModelContext() : base("ModelContext")
         {
-            CandidatesRepository = new CandidatesRepository(this);
-            ElectoralDistrictsRepository = new ElectoralDistrictsRepository(this);
+            Candidates = new CandidatesRepository(this);
+            Elections = new ElectionsRepository(this);
+            ElectoralDistricts = new ElectoralDistrictsRepository(this);
+            ElectoralDistrictElection = new ElectoralDistrictElectionsRepository(this);
+            ElectionResults = new ElectionResultsRepository(this);
+            ElectionCandidatesVotes = new ElectionCandidatesVotesRepository(this);
         }
 
-        public CandidatesRepository CandidatesRepository { get; private set; }
-        public ElectoralDistrictsRepository ElectoralDistrictsRepository { get; private set; }
+        public CandidatesRepository Candidates { get; private set; }
+        public ElectionsRepository Elections { get; private set; }
+        public ElectoralDistrictsRepository ElectoralDistricts { get; private set; }
+        public ElectoralDistrictElectionsRepository ElectoralDistrictElection { get; private set; }
+        public ElectionResultsRepository ElectionResults { get; private set; }
+        public ElectionCandidatesVotesRepository ElectionCandidatesVotes { get; private set; }
 
-        public DbSet<Candidate> Candidates
+        #region Список таблиц для автоматической миграции
+        private DbSet<Candidate> CandidatesTable
         {
             get { return Set<Candidate>(); }
         }
 
-        public DbSet<Election> Elections
+        private DbSet<Election> ElectionsTable
         {
             get { return Set<Election>(); }
         }
 
-        public DbSet<ElectoralDistrict> ElectoralDistricts
+        private DbSet<ElectoralDistrict> ElectoralDistrictsTable
         {
             get { return Set<ElectoralDistrict>(); }
         }
 
-        public DbSet<ElectoralDistrictElection> ElectoralDistrictElection
+        private DbSet<ElectoralDistrictElection> ElectoralDistrictElectionTable
         {
             get { return Set<ElectoralDistrictElection>(); }
         }
 
-        public DbSet<ElectionResult> ElectionResults
+        private DbSet<ElectionResult> ElectionResultsTable
         {
             get { return Set<ElectionResult>(); }
         }
 
-        public DbSet<ElectionCandidateVotes> ElectionCandidatesVotes
+        private DbSet<ElectionCandidateVotes> ElectionCandidatesVotesTable
         {
             get { return Set<ElectionCandidateVotes>(); }
         }
+        #endregion
     }
 }

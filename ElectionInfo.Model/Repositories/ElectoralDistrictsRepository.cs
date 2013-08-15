@@ -8,43 +8,34 @@ namespace ElectionInfo.Model
         {
         }
 
-        public ElectoralDistrict GetOrCreate(string name, ElectoralDistrict higherDistrict)
+        public ElectoralDistrict GetOrAdd(string name, ElectoralDistrict higherDistrict)
         {
             ElectoralDistrict district;
             if (higherDistrict == null)
             {
-                district = Context.ElectoralDistricts.SingleOrDefault(d =>
+                district = this.SingleOrDefault(d =>
                     d.Name == name &&
                     d.HigherDistrictId == null);
             }
             else
             {
-                district = Context.ElectoralDistricts.SingleOrDefault(d =>
+                district = this.SingleOrDefault(d =>
                     d.Name == name &&
                     d.HigherDistrictId == higherDistrict.Id);
             }
 
-            return district ?? Create(name, higherDistrict);
-        }
-
-        public ElectoralDistrict Create(string name, ElectoralDistrict higherDistrict)
-        {
-            var district = new ElectoralDistrict
+            if (district == null)
             {
-                Name = name,
-                HigherDistrict = higherDistrict,
-                HierarchyPath = higherDistrict == null ? null : higherDistrict.HierarchyPath + "\\" + higherDistrict.Id
-            };
-
-            Context.ElectoralDistricts.Add(district);
-            Context.SaveChanges();
-
+                district = new ElectoralDistrict(name, higherDistrict);
+                Add(district);
+            }
+            
             return district;
         }
 
-        public ElectoralDistrict GetOrCreateByUniqueName(string name)
+        public ElectoralDistrict GetOrAddByUniqueName(string name)
         {
-            var district = Context.ElectoralDistricts.SingleOrDefault(d => d.Name == name);
+            var district = this.SingleOrDefault(d => d.Name == name);
 
             if (district == null)
             {
@@ -55,11 +46,16 @@ namespace ElectionInfo.Model
                     HierarchyPath = null
                 };
 
-                Context.ElectoralDistricts.Add(district);
-                Context.SaveChanges();
+                Add(district);
             }
 
             return district;
+        }
+
+        public override void Add(ElectoralDistrict entity)
+        {
+            base.Add(entity);
+            Context.SaveChanges();
         }
     }
 }

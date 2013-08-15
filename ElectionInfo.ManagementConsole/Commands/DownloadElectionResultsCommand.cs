@@ -13,6 +13,7 @@ namespace ElectionInfo.ManagementConsole
         private WebClient webClient;
         private ParsersFactory parsersFactory;
         private ModelContext context;
+        private int[] skipSubUrlsCounts;
 
         public override string Name
         {
@@ -23,19 +24,13 @@ namespace ElectionInfo.ManagementConsole
         {
             if (arguments.Length < 1)
                 throw new ArgumentException("arguments.Length < 1");
+            
+            var uri = arguments[0];
 
-            int skipSubUrls = 0;
-            int skipSubSubUrls = 0;
             if (arguments.Length >= 3 && arguments[1] == "skip")
             {
-                skipSubUrls = int.Parse(arguments[2]);
-                if (arguments.Length > 3)
-                {
-                    skipSubSubUrls = int.Parse(arguments[3]);
-                }
+                skipSubUrlsCounts = arguments.Skip(2).Select(int.Parse).ToArray();
             }
-
-            var uri = arguments[0];
 
             Console.WriteLine("Начата обработка");
 
@@ -44,24 +39,23 @@ namespace ElectionInfo.ManagementConsole
 
             using (logFile = new StreamWriter("log.txt", true, Encoding.GetEncoding(1251)))
             {
-                using (context = new ModelContext())
+                context = new ModelContext();
+                try
                 {
-                    try
-                    {
-                        context.Configuration.AutoDetectChangesEnabled = false;
-                        DownloadAndParse(uri, "SubUrlNumber", null, skipSubUrls, skipSubSubUrls);
-                    }
-                    finally
-                    {
-                        context.Configuration.AutoDetectChangesEnabled = true;
-                    }
+                    context.Configuration.AutoDetectChangesEnabled = false;
+                    DownloadAndParse(uri, 0);
+                }
+                finally
+                {
+                    context.Configuration.AutoDetectChangesEnabled = true;
+                    context.Dispose();
                 }
             }
 
             Console.WriteLine("Завершена обработка всех дочерних uri");
         }
 
-        private void DownloadAndParse(string url, string subUrlLogName, IParser parentParser = null, int skipSubUrls = 0, int skipSubSubUrls = 0)
+        private void DownloadAndParse(string url, int level, IParser parentParser = null)
         {
             WriteLineToLog("Начата обработка: {0}", url);
             IParser parser;
@@ -75,17 +69,24 @@ namespace ElectionInfo.ManagementConsole
                 parser = parsersFactory.CreateParser(url, reader, context, parentParser);
                 parser.Parse();
             }
-            int subUrlNumber = 1 + skipSubUrls;
-            foreach (string subUrl in parser.SubUrls.Skip(skipSubUrls))
+
+            int skipSubUrlsCount = 0;
+            if (skipSubUrlsCounts.Length > level)
+            {
+                skipSubUrlsCount = skipSubUrlsCounts[level];
+                skipSubUrlsCounts[level] = 0;
+            }
+
+            int subUrlNumber = 1 + skipSubUrlsCount;
+            foreach (string subUrl in parser.SubUrls.Skip(skipSubUrlsCount))
             {
                 if (parser.SubUrls.Count > 1)
                 {
-                    WriteLineToLog("{0} = {1}", subUrlLogName, subUrlNumber);
+                    WriteLineToLog("Level {0}, Index {1}", level, subUrlNumber);
                 }
 
-                DownloadAndParse(subUrl, "Sub" + subUrlLogName, parser, skipSubSubUrls);
+                DownloadAndParse(subUrl, level + 1, parser);
 
-                skipSubSubUrls = 0;
                 subUrlNumber++;
             }
             WriteLineToLog("Завершена обработка: {0}", url);

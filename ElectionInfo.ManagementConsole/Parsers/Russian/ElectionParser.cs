@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using ElectionInfo.Model;
 
 namespace ElectionInfo.ManagementConsole
@@ -36,26 +35,15 @@ namespace ElectionInfo.ManagementConsole
             Reader.MoveTo("<td", out districtNameLine);
             var districtName = districtNameLine.GetTagValue("td");
 
-            District = Context.ElectoralDistrictsRepository.GetOrCreateByUniqueName(districtName);
+            District = Context.ElectoralDistricts.GetOrAddByUniqueName(districtName);
 
             Reader.MoveTo("<b>Дата голосования</b>");
             string electionDateLine;
             Reader.MoveTo("<td", out electionDateLine);
-            DateTime electionDate = DateTime.Parse(electionDateLine.GetTagValue("td"));
+            var electionDate = DateTime.Parse(electionDateLine.GetTagValue("td"));
 
-            Election = Context.Elections.FirstOrDefault(
-                election => election.Name == electionName && election.Date == electionDate);
-            if (Election == null)
-            {
-                Election = new Election
-                                     {
-                                         Name = electionName,
-                                         ElectoralDistrict = District,
-                                         DataSourceUrl = Url,
-                                         Date = electionDate
-                                     };
-                Context.Elections.Add(Election);
-            }
+            Election = Context.Elections.GetOrAdd(electionName, District, electionDate, Url);
+
             Context.SaveChanges();
         }
     }
