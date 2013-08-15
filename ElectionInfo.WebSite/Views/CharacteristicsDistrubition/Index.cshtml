@@ -1,0 +1,66 @@
+﻿@model CharacteristicsDistrubitionViewModel
+
+@{
+    ViewBag.Title = "Построение графиков распределения явки и процентов";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title.</h1>
+</hgroup>
+
+<section class="characteristics-distrubition">
+    <header>
+        <h3>Выборы</h3>
+    </header>
+    @Html.DropDownListFor(model => model.Elections.SelectedId, Model.Elections.Items)
+
+    <header>
+        <h3>Избирательный округ</h3>
+    </header>
+    <div id="ElectoralDistrictsWrapper">
+        @for (int i = 0; i < Model.ElectoralDistricts.Count; i++)
+        {
+            @Html.EditorFor(model => model.ElectoralDistricts[i], "ElectoralDistrictSelector")
+        }
+    </div>
+</section>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function() {
+            $('#@Html.IdFor(model => model.Elections.SelectedId)').on('change', function() {
+                $.get(
+                  '@Url.Action("ElectoralDistrictSelector", "Editors")',
+                  {
+                      ElectionId: $(this).val()
+                  },
+                  function(result) {
+                      $('#ElectoralDistrictsWrapper').html(result);
+                  }
+                );
+            });
+
+            $(document).on('change', '.electoral-district-selector', function () {
+                var selector = $(this);
+                if (selector.val() == '')
+                {
+                    selector.nextAll().remove();
+                }
+                else
+                {
+                    $.get(
+                      '@Url.Action("ElectoralDistrictSelector", "Editors")',
+                      {
+                          ElectionId: $('#@Html.IdFor(model => model.Elections.SelectedId)').val(),
+                          HigherDistrictId: selector.val()
+                      },
+                      function (result) {
+                          selector.nextAll().remove();
+                          selector.parent().append(result);
+                      }
+                    );
+                }
+            });
+        });
+    </script>
+}

@@ -10,7 +10,7 @@ namespace ElectionInfo.Model
 
         protected CachedRepository(ModelContext context) : base(context)
         {
-            cache = new Lazy<IList<TEntity>>(() => Items.ToList());
+            cache = new Lazy<IList<TEntity>>(() => this.ToList());
         }
 
         protected IList<TEntity> Cache 
@@ -18,7 +18,7 @@ namespace ElectionInfo.Model
             get { return cache.Value; }
         }
 
-        protected override void Add(TEntity entity)
+        public override void Add(TEntity entity)
         {
             base.Add(entity);
             Cache.Add(entity);

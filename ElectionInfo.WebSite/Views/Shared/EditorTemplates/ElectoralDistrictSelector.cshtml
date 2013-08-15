@@ -1,0 +1,6 @@
+﻿@model SelectorViewModel
+
+@if (Model.Items.Length > 1)
+{
+    @Html.DropDownListFor(model => model.SelectedId, Model.Items, new { @class = "electoral-district-selector" })
+}

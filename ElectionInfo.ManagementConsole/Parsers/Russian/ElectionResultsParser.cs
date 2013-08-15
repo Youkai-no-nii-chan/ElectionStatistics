@@ -37,8 +37,8 @@ namespace ElectionInfo.ManagementConsole
             while (Reader.MoveTo(lineNumber + "</nobr>", "</table>", out line))
             {
                 Reader.MoveTo("<nobr>", out line);
-                candidates.Add(Context.CandidatesRepository
-                    .GetOrCreate(line.GetTagValue("nobr").Trim(), Election));
+                candidates.Add(Context.Candidates
+                    .GetOrAdd(line.GetTagValue("nobr").Trim(), Election));
                 lineNumber++;
             }
 
@@ -46,19 +46,23 @@ namespace ElectionInfo.ManagementConsole
                 throw new InvalidOperationException("candidates.Count == 0");
 
             Reader.MoveTo("”» ", out line);
+            var district = new ElectoralDistrict(line.GetTagValue("nobr"), HigherDistrict);
+            Context.ElectoralDistricts.Add(district);
             results.Add(
                 new ElectionResult
                     {
-                        ElectoralDistrict = Context.ElectoralDistrictsRepository.GetOrCreate(line.GetTagValue("nobr"), HigherDistrict),
+                        ElectoralDistrict = district,
                         Election = Election,
                         DataSourceUrl = Url
                     });
             while (Reader.MoveTo("”» ", "</tr>", out line))
             {
+                district = new ElectoralDistrict(line.GetTagValue("nobr"), HigherDistrict);
+                Context.ElectoralDistricts.Add(district);
                 results.Add(
                     new ElectionResult
                         {
-                            ElectoralDistrict = Context.ElectoralDistrictsRepository.GetOrCreate(line.GetTagValue("nobr"), HigherDistrict),
+                            ElectoralDistrict = district,
                             Election = Election,
                             DataSourceUrl = Url
                         });

@@ -9,9 +9,9 @@ namespace ElectionInfo.Model
         {
         }
 
-        public Candidate GetOrCreate(string name, Election election)
+        public Candidate GetOrAdd(string name, Election election)
         {
-            var candidate = Cache.SingleOrDefault(c => c.Name == name) ?? Context.Candidates.SingleOrDefault(c => c.Name == name);
+            var candidate = Cache.SingleOrDefault(c => c.Name == name) ?? this.SingleOrDefault(c => c.Name == name);
 
             if (candidate == null)
             {
