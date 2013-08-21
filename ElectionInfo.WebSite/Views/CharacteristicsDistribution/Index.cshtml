@@ -1,4 +1,4 @@
-﻿@model CharacteristicsDistrubitionViewModel
+﻿@model CharacteristicsDistributionViewModel
 
 @{
     ViewBag.Title = "Построение графиков распределения явки и процентов";
@@ -22,6 +22,16 @@
         {
             @Html.EditorFor(model => model.ElectoralDistricts[i], "ElectoralDistrictSelector")
         }
+    </div>
+
+    <header>
+        <h3 style="display: inline">Характеристика</h3> (<a id="ShowDistributionValueDescriptionLink">подробнее</a>)
+        <div id="DistributionValuesDescriptionDialog" title="Характеристики" style="display: none">
+            Суммарное количество избирателей зарегистрированных на УИКах является более показательной характеристикой, так как УИКи сильно различаются по количеству зарегистрированных на них избирателей.
+        </div>
+    </header>
+    <div>
+        @Html.DropDownListFor(model => model.DistributionValue, Model.DistributionValues) 
     </div>
 </section>
 
@@ -60,6 +70,11 @@
                       }
                     );
                 }
+            });
+
+            $('#ShowDistributionValueDescriptionLink').click(function () {
+                var position = $(this).position();
+                $('#DistributionValuesDescriptionDialog').dialog({ position: [position.left, position.top], width: 600 });
             });
         });
     </script>

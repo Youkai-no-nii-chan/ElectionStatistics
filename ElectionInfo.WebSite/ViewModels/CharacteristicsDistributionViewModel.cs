@@ -1,18 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+using System.Linq;
 using ElectionInfo.Model;
 
 namespace ElectionInfo.WebSite
 {
-    public class CharacteristicsDistrubitionViewModel
+    public class CharacteristicsDistributionViewModel
     {
-        public CharacteristicsDistrubitionViewModel()
+        public CharacteristicsDistributionViewModel()
         {
             Elections = new ElectionSelectorViewModel();
             ElectoralDistricts = new List<ElectoralDistrictSelectorViewModel>();
+            DistributionValue = DistributionValue.VotersCount;
         }
 
         public ElectionSelectorViewModel Elections { get; set; }
         public List<ElectoralDistrictSelectorViewModel> ElectoralDistricts { get; set; }
+
+        public DistributionValue DistributionValue { get; set; }
+        public ICollection<SelectListItem> DistributionValues { get; set; }
 
         public void LoadData(ModelContext context)
         {
@@ -30,6 +37,16 @@ namespace ElectionInfo.WebSite
             {
                 model.LoadData(context);
             }
+
+            DistributionValues = Enum.GetValues(typeof (DistributionValue))
+                .OfType<DistributionValue>()
+                .Select(value => new SelectListItem
+                {
+                    Text = value.GetDescription(),
+                    Value = value.ToString(),
+                    Selected = DistributionValue == value
+                })
+                .ToArray();
         }
     }
 }
