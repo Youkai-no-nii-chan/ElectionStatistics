@@ -3,9 +3,9 @@ using ElectionInfo.Model;
 
 namespace ElectionInfo.WebSite.Controllers
 {
-    public class CharacteristicsDistrubitionController : Controller
+    public class CharacteristicsDistributionController : Controller
     {
-        public ActionResult Index(CharacteristicsDistrubitionViewModel model)
+        public ActionResult Index(CharacteristicsDistributionViewModel model)
         {
             using (var context = new ModelContext())
             {

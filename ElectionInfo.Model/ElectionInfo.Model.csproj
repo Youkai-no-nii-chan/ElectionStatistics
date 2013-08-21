@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\EnumsHelper.cs" />
     <Compile Include="Entities\Candidate.cs" />
     <Compile Include="Entities\Election.cs" />
     <Compile Include="Entities\ElectionCandidateVotes.cs" />

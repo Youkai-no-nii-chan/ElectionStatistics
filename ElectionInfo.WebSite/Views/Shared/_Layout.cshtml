@@ -6,6 +6,7 @@
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/themes/base/css")
         @Scripts.Render("~/bundles/modernizr")
     </head>
     <body>
@@ -18,7 +19,7 @@
                     <nav>
                         <ul id="menu">
                             <li>@Html.ActionLink("О сайте", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Распределение явки и процентов", "Index", "CharacteristicsDistrubition")</li>
+                            <li>@Html.ActionLink("Распределение явки и процентов", "Index", "CharacteristicsDistribution")</li>
                             <li>@Html.ActionLink("Контакты", "Contacts", "Home")</li>
                         </ul>
                     </nav>
@@ -40,6 +41,7 @@
         </footer>
 
         @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")
         @RenderSection("scripts", required: false)
     </body>
 </html>

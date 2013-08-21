@@ -29,6 +29,7 @@ a {
 
     a:hover {
         background-color: #c7d1d6;
+        cursor: pointer;
     }
 
 header, footer, hgroup,
