@@ -13,5 +13,14 @@ namespace ElectionInfo.WebSite.Controllers
                 return PartialView("~/Views/Shared/EditorTemplates/ElectoralDistrictSelector.cshtml", model);
             }
         }
+
+        public ActionResult DistributionParametersSelector(DistributionParametersViewModel model)
+        {
+            using (var context = new ModelContext())
+            {
+                model.LoadData(context);
+                return PartialView("~/Views/Shared/EditorTemplates/DistributionParametersSelector.cshtml", model);
+            }
+        }
     }
 }
