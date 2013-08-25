@@ -13,6 +13,10 @@ namespace ElectionInfo.WebSite
             Elections = new ElectionSelectorViewModel();
             ElectoralDistricts = new List<ElectoralDistrictSelectorViewModel>();
             DistributionValue = DistributionValue.VotersCount;
+            DistributionParameters = new DistributionParametersViewModel();
+            DistributionStepSize = 1;
+            ChartWidth = 1000;
+            ChartHeight = 1000;
         }
 
         public ElectionSelectorViewModel Elections { get; set; }
@@ -20,6 +24,13 @@ namespace ElectionInfo.WebSite
 
         public DistributionValue DistributionValue { get; set; }
         public ICollection<SelectListItem> DistributionValues { get; set; }
+
+        public DistributionParametersViewModel DistributionParameters { get; set; }
+
+        public double DistributionStepSize { get; set; }
+
+        public int ChartWidth { get; set; }
+        public int ChartHeight { get; set; }
 
         public void LoadData(ModelContext context)
         {
@@ -47,6 +58,9 @@ namespace ElectionInfo.WebSite
                     Selected = DistributionValue == value
                 })
                 .ToArray();
+
+            DistributionParameters.ElectionId = Elections.SelectedId;
+            DistributionParameters.LoadData(context);
         }
     }
 }

@@ -170,7 +170,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DistributionParameter.cs" />
     <Compile Include="ViewModels\CharacteristicsDistributionViewModel.cs" />
+    <Compile Include="ViewModels\DistributionParametersViewModel.cs" />
     <Compile Include="ViewModels\DistributionValue.cs" />
     <Compile Include="ViewModels\ElectionSelectorViewModel.cs" />
     <Compile Include="ViewModels\ElectoralDistrictSelectorViewModel.cs" />
@@ -285,6 +287,8 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\EditorTemplates\ElectoralDistrictSelector.cshtml" />
     <Content Include="Views\CharacteristicsDistribution\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DistributionParametersSelector.cshtml" />
+    <Content Include="Views\CharacteristicsDistribution\Chart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

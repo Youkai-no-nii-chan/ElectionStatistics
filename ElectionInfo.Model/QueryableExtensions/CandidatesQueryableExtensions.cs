@@ -1,0 +1,19 @@
+﻿using System;
+using System.Linq;
+
+namespace ElectionInfo.Model
+{
+    public static class CandidatesQueryableExtensions
+    {
+        public static IQueryable<Candidate> ByElection(
+            this IQueryable<Candidate> items,
+            ModelContext context,
+            int electionId)
+        {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
+            return items.Where(candidate => candidate.Elections.Any(election => election.Id == electionId));
+        }
+    }
+}
