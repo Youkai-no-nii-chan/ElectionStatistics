@@ -52,6 +52,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -158,6 +160,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChartBuilding\ParametersDistributionChartBuilder.cs" />
     <Compile Include="Content\App_Start\AuthConfig.cs" />
     <Compile Include="Content\App_Start\BundleConfig.cs" />
     <Compile Include="Content\App_Start\FilterConfig.cs" />
@@ -170,10 +173,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\DistributionParameter.cs" />
+    <Compile Include="ViewModels\CharacteristicsDistributionRequest.cs" />
+    <Compile Include="ChartBuilding\ChartBuilder.cs" />
+    <Compile Include="ChartBuilding\DistributionParameter.cs" />
     <Compile Include="ViewModels\CharacteristicsDistributionViewModel.cs" />
     <Compile Include="ViewModels\DistributionParametersViewModel.cs" />
-    <Compile Include="ViewModels\DistributionValue.cs" />
+    <Compile Include="ChartBuilding\DistributionValue.cs" />
     <Compile Include="ViewModels\ElectionSelectorViewModel.cs" />
     <Compile Include="ViewModels\ElectoralDistrictSelectorViewModel.cs" />
     <Compile Include="ViewModels\SelectorViewModel.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using ElectionInfo.Model;
@@ -14,41 +15,56 @@ namespace ElectionInfo.WebSite
             ElectoralDistricts = new List<ElectoralDistrictSelectorViewModel>();
             DistributionValue = DistributionValue.VotersCount;
             DistributionParameters = new DistributionParametersViewModel();
-            DistributionStepSize = 1;
-            ChartWidth = 1000;
-            ChartHeight = 1000;
         }
 
-        public ElectionSelectorViewModel Elections { get; set; }
-        public List<ElectoralDistrictSelectorViewModel> ElectoralDistricts { get; set; }
+        public ElectionSelectorViewModel Elections { get; private set; }
+        public List<ElectoralDistrictSelectorViewModel> ElectoralDistricts { get; private set; }
 
-        public DistributionValue DistributionValue { get; set; }
-        public ICollection<SelectListItem> DistributionValues { get; set; }
+        public DistributionValue DistributionValue { get; private set; }
+        public ICollection<SelectListItem> DistributionValues { get; private set; }
 
-        public DistributionParametersViewModel DistributionParameters { get; set; }
+        public DistributionParametersViewModel DistributionParameters { get; private set; }
 
         public double DistributionStepSize { get; set; }
 
         public int ChartWidth { get; set; }
         public int ChartHeight { get; set; }
 
-        public void LoadData(ModelContext context)
+        public void LoadData(ModelContext context, CharacteristicsDistributionRequest request)
         {
+            Elections.SelectedId = request.ElectionId;
             Elections.LoadData(context);
 
-            if (ElectoralDistricts.Count == 0)
+            var districtsViewModel = new ElectoralDistrictSelectorViewModel
             {
-                ElectoralDistricts.Add(new ElectoralDistrictSelectorViewModel
+                ElectionId = Elections.SelectedId.Value,
+            };
+            districtsViewModel.LoadData(context);
+            ElectoralDistricts.Add(districtsViewModel);
+
+            int highestDistrictId = districtsViewModel.HigherDistrictId.Value;
+            
+            if (request.DistrictId != null)
+            {
+                var district = context.ElectoralDistricts.GetById(request.DistrictId.Value);
+                while (district != null && district.HigherDistrictId != highestDistrictId)
                 {
-                    ElectionId = Elections.SelectedId.Value
-                });
+                    if (district.HigherDistrictId == null)
+                        throw new HttpException(400, string.Format("Округ с Id={0} не участвовал в выборах с Id={1}", request.DistrictId, request.ElectionId));
+
+                    districtsViewModel = new ElectoralDistrictSelectorViewModel
+                    {
+                        ElectionId = Elections.SelectedId.Value,
+                        HigherDistrictId = district.HigherDistrictId
+                    }; 
+                    districtsViewModel.LoadData(context);
+                    ElectoralDistricts.Insert(ElectoralDistricts.Count, districtsViewModel);
+
+                    district = context.ElectoralDistricts.GetById(district.HigherDistrictId.Value);
+                }
             }
 
-            foreach (var model in ElectoralDistricts)
-            {
-                model.LoadData(context);
-            }
-
+            DistributionValue = request.DistributionValue;
             DistributionValues = Enum.GetValues(typeof (DistributionValue))
                 .OfType<DistributionValue>()
                 .Select(value => new SelectListItem
@@ -60,7 +76,12 @@ namespace ElectionInfo.WebSite
                 .ToArray();
 
             DistributionParameters.ElectionId = Elections.SelectedId;
+            DistributionParameters.SelectedIds = request.DistributionParameters;
             DistributionParameters.LoadData(context);
+
+            DistributionStepSize = request.DistributionStepSize;
+            ChartWidth = request.ChartWidth;
+            ChartHeight = request.ChartHeight;
         }
     }
 }

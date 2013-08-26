@@ -33,5 +33,13 @@ namespace ElectionInfo.Model
                     district => district.Id,
                     (election, district) => district);
         }
+
+        public static ElectoralDistrict GetById(this IQueryable<ElectoralDistrict> items, int districtId)
+        {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
+            return items.First(district => district.Id == districtId);
+        }
     }
 }
