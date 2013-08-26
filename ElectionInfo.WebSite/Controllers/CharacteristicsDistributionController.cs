@@ -1,28 +1,33 @@
 ﻿using System.Web.Mvc;
 using ElectionInfo.Model;
-using System.Linq;
 
 namespace ElectionInfo.WebSite.Controllers
 {
     public class CharacteristicsDistributionController : Controller
     {
-        public ActionResult Index(CharacteristicsDistributionViewModel model)
+        public ActionResult Index(CharacteristicsDistributionRequest request)
         {
             using (var context = new ModelContext())
             {
-                model.LoadData(context);
+                var model = new CharacteristicsDistributionViewModel();
+                model.LoadData(context, request);
                 return View(model);
             }
         }
 
-        public ActionResult Chart(CharacteristicsDistributionViewModel model)
+        public ActionResult Chart(CharacteristicsDistributionRequest request)
         {
-            return PartialView(model);
+            return PartialView(request);
         }
 
-        public ActionResult ChartImage(CharacteristicsDistributionViewModel model)
+        public ActionResult ChartImage(CharacteristicsDistributionRequest request)
         {
-            return null;
+            var builder = new ParametersDistributionChartBuilder(request);
+            using (var context = new ModelContext())
+            {
+                builder.Build(context);
+            }
+            return new FileStreamResult(builder.Image, "image/png");
         }
     }
 }

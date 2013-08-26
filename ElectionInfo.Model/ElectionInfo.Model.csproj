@@ -70,6 +70,7 @@
     <Compile Include="ModelContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableExtensions\CandidatesQueryableExtensions.cs" />
+    <Compile Include="QueryableExtensions\ElectionResultsQueryableExtensions.cs" />
     <Compile Include="QueryableExtensions\ElectoralDistrictElectionQueryableExtensions.cs" />
     <Compile Include="QueryableExtensions\ElectoralDistrictQueryableExtensions.cs" />
     <Compile Include="Repositories\CachedRepository.cs" />

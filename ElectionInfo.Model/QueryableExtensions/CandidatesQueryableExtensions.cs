@@ -15,5 +15,13 @@ namespace ElectionInfo.Model
 
             return items.Where(candidate => candidate.Elections.Any(election => election.Id == electionId));
         }
+
+        public static Candidate GetById(this IQueryable<Candidate> items, int candidateId)
+        {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
+            return items.First(candidate => candidate.Id == candidateId);
+        }
     }
 }

@@ -9,74 +9,74 @@
 </hgroup>
 
 <section class="characteristics-distrubition">
-    <form id="CharacteristicsDistrubitionForm">
-        <header>
-            <h3>Выборы</h3>
-        </header>
-        @Html.DropDownListFor(model => model.Elections.SelectedId, Model.Elections.Items)
+    <header>
+        <h3>Выборы</h3>
+    </header>
+    @Html.DropDownListFor(model => model.Elections.SelectedId, Model.Elections.Items)
 
-        <header>
-            <h3>Избирательный округ</h3>
-        </header>
-        <div id="ElectoralDistrictsWrapper">
-            @for (int i = 0; i < Model.ElectoralDistricts.Count; i++)
-            {
-                @Html.EditorFor(model => model.ElectoralDistricts[i], "ElectoralDistrictSelector")
-            }
-        </div>
+    <header>
+        <h3>Избирательный округ</h3>
+    </header>
+    <div id="ElectoralDistrictsWrapper">
+        @for (int i = 0; i < Model.ElectoralDistricts.Count; i++)
+        {
+            @Html.EditorFor(model => model.ElectoralDistricts[i], "ElectoralDistrictSelector")
+        }
+    </div>
 
-        <header>
-            <h3 style="display: inline">Характеристика</h3> (<a id="ShowDistributionValueDescriptionLink">подробнее</a>)
-            <div id="DistributionValuesDescriptionDialog" title="Характеристики" style="display: none">
-                Суммарное количество избирателей зарегистрированных на УИКах является более показательной характеристикой, так как УИКи сильно различаются по количеству зарегистрированных на них избирателей.
-            </div>
-        </header>
-        <div>
-            @Html.DropDownListFor(model => model.DistributionValue, Model.DistributionValues) 
+    <header>
+        <h3 style="display: inline">Характеристика</h3> (<a id="ShowDistributionValueDescriptionLink">подробнее</a>)
+        <div id="DistributionValuesDescriptionDialog" title="Характеристики" style="display: none">
+            Суммарное количество избирателей зарегистрированных на УИКах является более показательной характеристикой, так как УИКи сильно различаются по количеству зарегистрированных на них избирателей.
         </div>
+    </header>
+    <div>
+        @Html.DropDownListFor(model => model.DistributionValue, Model.DistributionValues) 
+    </div>
     
-        <header>
-            <h3 style="display: inline">Параметры</h3> (зажмите Ctrl, чтобы выбрать несколько)
-        </header>
-        <div id="DistributionParametersWrapper">
-            @Html.EditorFor(model => model.DistributionParameters, "DistributionParametersSelector")
+    <header>
+        <h3 style="display: inline">Параметры</h3> (зажмите Ctrl, чтобы выбрать несколько)
+    </header>
+    <div id="DistributionParametersWrapper">
+        @Html.EditorFor(model => model.DistributionParameters, "DistributionParametersSelector")
+    </div>
+    
+    <header>
+        <h3 style="display: inline">Шаг построения графика</h3> (<a id="ShowDistributionStepDescriptionLink">подробнее</a>)
+        <div id="DistributionStepDescriptionDialog" title="Шаг построения графика" style="display: none">
+            При построении графика распределения все значения явки или голосов за определенного кандидата группируются в группы по <b>N</b>%, где <b>N</b> - шаг построения графика. При этом:
+	        <ul>
+                <li>точка 0% соответствует значениям от 0 до N/2,</li>
+                <li>точка 40% соответствует значениям от 40 - N/2 до 40 + N/2,</li>
+                <li>точка 100% соответствует значениям от 100 - N/2 до 100.</li>
+            </ul>
+            Рекомендуется использовать значения шага от 0.5% до 2%. При слишком большом шаге многие пики графиков будут не видны. При слишком маленьком шаге распределение параметров также будет сложно оценить.<br />
+            При маленьком шаге будут присутствовать резкие пики на красивых значениях: 1/2 (50%), 1/3 (33.33%), 2/3 (66.67%) и т.п. Это связано не с фальсификациями, а с тем, что такие дроби встречаются чаще. Т.е. среди разнообразных участков, на которых зарегистрировано, например, от 50 до 2000 избирателей, у одного кандидата могут быть результаты  25/50, 31/62, ..., 1000/2000. Все эти значения соответсвуют 50%. А значений 1001/2000 будет меньше, так как такие значения  могут встретится только на самых больших участках. Если взять шаг побольше, то эта проблема исчезает.
         </div>
+    </header>
+    <div>
+        @Html.TextBoxFor(model => model.DistributionStepSize, new { style = "width: 40px" })
+    </div>
     
-        <header>
-            <h3 style="display: inline">Шаг построения графика</h3> (<a id="ShowDistributionStepDescriptionLink">подробнее</a>)
-            <div id="DistributionStepDescriptionDialog" title="Шаг построения графика" style="display: none">
-                При построении графика распределения все значения явки или голосов за определенного кандидата группируются в группы по <b>N</b>%, где <b>N</b> - шаг построения графика. При этом:
-	            <ul>
-                    <li>точка 0% соответствует значениям от 0 до N/2,</li>
-                    <li>точка 40% соответствует значениям от 40 - N/2 до 40 + N/2,</li>
-                    <li>точка 100% соответствует значениям от 100 - N/2 до 100.</li>
-                </ul>
-                Рекомендуется использовать значения шага от 0.5% до 2%. При слишком большом шаге многие пики графиков будут не видны. При слишком маленьком шаге распределение параметров также будет сложно оценить.<br />
-                При маленьком шаге будут присутствовать резкие пики на красивых значениях: 1/2 (50%), 1/3 (33.33%), 2/3 (66.67%) и т.п. Это связано не с фальсификациями, а с тем, что такие дроби встречаются чаще. Т.е. среди разнообразных участков, на которых зарегистрировано, например, от 50 до 2000 избирателей, у одного кандидата могут быть результаты  25/50, 31/62, ..., 1000/2000. Все эти значения соответсвуют 50%. А значений 1001/2000 будет меньше, так как такие значения  могут встретится только на самых больших участках. Если взять шаг побольше, то эта проблема исчезает.
-            </div>
-        </header>
-        <div>
-            @Html.TextBoxFor(model => model.DistributionStepSize, new { style = "width: 40px" })
-        </div>
+    <header>
+        <h3 style="display: inline">Разрешение</h3>
+    </header>
+    <div>
+        @Html.TextBoxFor(model => model.ChartWidth, new { style = "width: 40px" }) x @Html.TextBoxFor(model => model.ChartHeight, new { style = "width: 40px" })
+    </div>
     
-        <header>
-            <h3 style="display: inline">Разрешение</h3>
-        </header>
-        <div>
-            @Html.TextBoxFor(model => model.ChartWidth, new { style = "width: 40px" }) x @Html.TextBoxFor(model => model.ChartHeight, new { style = "width: 40px" })
-        </div>
+    <input type="button" value="Построить график" id="BuildChartButton"/>
     
-        <input type="button" value="Построить график" id="BuildChartButton"/>
-    
-        <div id="ChartWrapper">
+    <div id="ChartWrapper">
         
-        </div>
-    </form>
+    </div>
 </section>
 
 @section scripts {
     <script type="text/javascript">
-        $(function() {
+        $(function () {
+            $.ajaxSettings.traditional = true;
+
             $('#@Html.IdFor(model => model.Elections.SelectedId)').on('change', function() {
                 $.get(
                   '@Url.Action("ElectoralDistrictSelector", "Editors")',
@@ -134,7 +134,15 @@
             $('#BuildChartButton').click(function () {
                 $.get(
                     '@Url.Action("Chart")',
-                    $('#CharacteristicsDistrubitionForm').serialize(),
+                    {
+                        ElectionId: $('#@Html.IdFor(model => model.Elections.SelectedId)').val(),
+                        DistrictId: $('.electoral-district-selector[value!=""]').last().val(),
+                        DistributionValue: $('#@Html.IdFor(model => model.DistributionValue)').val(),
+                        DistributionParameters: $('#@Html.IdFor(model => model.DistributionParameters.SelectedIds)').val(),
+                        DistributionStepSize: $('#@Html.IdFor(model => model.DistributionStepSize)').val(),
+                        ChartWidth: $('#@Html.IdFor(model => model.ChartWidth)').val(),
+                        ChartHeight: $('#@Html.IdFor(model => model.ChartHeight)').val(),
+                    },
                     function (result) {
                         $('#ChartWrapper').html(result);
                     }
