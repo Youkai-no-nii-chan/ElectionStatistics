@@ -5,14 +5,16 @@ namespace ElectionInfo.Model
 {
     public static class ElectionResultsQueryableExtensions
     {
-        public static IQueryable<ElectionResult> ByDistrictOrHigherDistrict(
+        public static IQueryable<ElectionResult> ByHigherDistrict(
             this IQueryable<ElectionResult> items,
             ElectoralDistrict district)
         {
             if (items == null)
                 throw new ArgumentNullException("items");
 
-            return items.Where(electionResult => electionResult.ElectoralDistrict.HierarchyPath.StartsWith(district.HierarchyPath));
+            var hierarchyPath = district.HierarchyPath + "\\" + district.Id;
+            return items
+                .Where(electionResult => electionResult.ElectoralDistrict.HierarchyPath.StartsWith(hierarchyPath));
         }
 
         public static IQueryable<ElectionResult> ByElection(

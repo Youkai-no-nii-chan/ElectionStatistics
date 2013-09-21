@@ -24,7 +24,7 @@ namespace ElectionInfo.WebSite
             var results = context.ElectionResults.ByElection(Request.ElectionId.Value);
             if (Request.DistrictId != null)
             {
-                results = results.ByDistrictOrHigherDistrict(context.ElectoralDistricts.GetById(Request.DistrictId.Value));
+                results = results.ByHigherDistrict(context.ElectoralDistricts.GetById(Request.DistrictId.Value));
             }
 
             int colorId = 0;
@@ -39,7 +39,7 @@ namespace ElectionInfo.WebSite
                 };
                 colorId++;
 
-                IQueryable<ChartData> values = null;
+                IQueryable<ChartData> values;
                 if (Enum.IsDefined(typeof(DistributionParameter), distributionParameter))
                 {
                     series.LegendText = ((DistributionParameter)distributionParameter).GetDescription(); 
@@ -49,27 +49,62 @@ namespace ElectionInfo.WebSite
                             values = results.Select(result => new ChartData
                             {
                                 VotersCount = result.VotersCount,
-                                Value = ((double)(result.IssuedInsideBallotsCount + result.IssuedOutsideBallotsCount)) / result.VotersCount * 100
+                                Value = result.InsideBallotsCount + result.OutsideBallotsCount == 0
+                                    ? 0
+                                    : ((double)(result.InsideBallotsCount + result.OutsideBallotsCount)) / result.VotersCount * 100
                             });
                             break;
+                        case DistributionParameter.AbsenteeCertificateVotersCount:
+                            values = results.Select(result => new ChartData
+                            {
+                                VotersCount = result.InsideBallotsCount + result.OutsideBallotsCount,
+                                Value = result.InsideBallotsCount + result.OutsideBallotsCount == 0
+                                    ? 0
+                                    : ((double)result.AbsenteeCertificateVotersCount) / (result.InsideBallotsCount + result.OutsideBallotsCount) * 100
+                            });
+                            break;
+                        case DistributionParameter.OutsideBallotsCount:
+                            values = results.Select(result => new ChartData
+                            {
+                                VotersCount = result.InsideBallotsCount + result.OutsideBallotsCount,
+                                Value = result.InsideBallotsCount + result.OutsideBallotsCount == 0
+                                    ? 0
+                                    : ((double)result.OutsideBallotsCount) / (result.InsideBallotsCount + result.OutsideBallotsCount) * 100
+                            });
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 else
                 {
                     var candidate = candidates.GetById(distributionParameter);
                     series.LegendText = candidate.ShortName;
+
+                    values = results
+                        .Join(
+                            context.ElectionCandidatesVotes.ByCandidate(candidate),
+                            result => result.Id,
+                            votes => votes.ElectionResultId,
+                            (result, votes) => new ChartData
+                            {
+                                VotersCount = result.InsideBallotsCount + result.OutsideBallotsCount,
+                                Value = result.InsideBallotsCount + result.OutsideBallotsCount == 0
+                                    ? 0
+                                    : ((double)votes.Count) / (result.InsideBallotsCount + result.OutsideBallotsCount) * 100
+                            });
                 }
 
                 var grouppedValues = values
                     .GroupBy(data => Math.Ceiling(data.Value / Request.DistributionStepSize) * Request.DistributionStepSize);
                 var points = Request.DistributionValue == DistributionValue.VotersCount
-                    ? grouppedValues.Select(groupping => new { X = groupping.Sum(data => data.VotersCount), Y = groupping.Key })
-                    : grouppedValues.Select(groupping => new { X = groupping.Count(), Y = groupping.Key });
+                    ? grouppedValues.Select(groupping => new { X = groupping.Key, Y = groupping.Sum(data => data.VotersCount) })
+                    : grouppedValues.Select(groupping => new { X = groupping.Key, Y = groupping.Count() });
 
                 double previousX = 0;
-                foreach (var point in points)
+                foreach (var point in points.OrderBy(arg => arg.X))
                 {
-                    while (point.X - previousX > Request.DistributionStepSize)
+                    while (point.X - previousX >= Request.DistributionStepSize)
                     {
                         series.Points.Add(new DataPoint(previousX, 0));
                         previousX += Request.DistributionStepSize;
@@ -92,6 +127,10 @@ namespace ElectionInfo.WebSite
 
                 Item.Series.Add(series);
             }
+            Item.ChartAreas[0].AxisX.MajorGrid.Interval = 10;
+            Item.ChartAreas[0].AxisX.Interval = 10;
+            Item.ChartAreas[0].AxisY.MajorGrid.Interval = yMax / 10;
+            Item.ChartAreas[0].AxisY.Interval = yMax / 10;
             Item.ChartAreas[0].AxisY.Maximum = yMax;
         }
 
