@@ -27,7 +27,7 @@ namespace ElectionInfo.WebSite.Controllers
             {
                 builder.Build(context);
             }
-            return new FileStreamResult(builder.Image, "image/png");
+            return File(builder.Image.ToArray(), "image/png");
         }
     }
 }

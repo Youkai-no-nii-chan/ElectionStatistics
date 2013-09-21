@@ -31,9 +31,9 @@ namespace ElectionInfo.ManagementConsole
             var results = new List<ElectionResult>();
 
             string line;
-            Reader.MoveTo("Число избирательных бюллетеней, не учтенных при получении");
+            Reader.MoveTo("Число бюллетеней, не учтенных при получении");
 
-            int lineNumber = 19;
+            int lineNumber = 10;
             while (Reader.MoveTo(lineNumber + "</nobr>", "</table>", out line))
             {
                 Reader.MoveTo("<nobr>", out line);
@@ -69,24 +69,24 @@ namespace ElectionInfo.ManagementConsole
             }
             Context.SaveChanges();
 
-            SetValues(results, (u, i) => u.VotersCount = i);
-            SetValues(results, (u, i) => u.ReceivedBallotsCount = i);
-            SetValues(results, (u, i) => u.EarlyIssuedBallotsCount = i);
-            SetValues(results, (u, i) => u.IssuedInsideBallotsCount = i);
-            SetValues(results, (u, i) => u.IssuedOutsideBallotsCount = i);
-            SetValues(results, (u, i) => u.CanceledBallotsCount = i);
-            SetValues(results, (u, i) => u.OutsideBallotsCount = i);
-            SetValues(results, (u, i) => u.InsideBallotsCount = i);
-            SetValues(results, (u, i) => u.InvalidBallotsCount = i);
-            SetValues(results, (u, i) => u.ValidBallotsCount = i);
-            SetValues(results, (u, i) => u.ReceivedAbsenteeCertificatesCount = i);
-            SetValues(results, (u, i) => u.IssuedAbsenteeCertificatesCount = i);
-            SetValues(results, (u, i) => u.AbsenteeCertificateVotersCount = i);
-            SetValues(results, (u, i) => u.CanceledAbsenteeCertificatesCount = i);
-            SetValues(results, (u, i) => u.IssuedByHigherDistrictAbsenteeCertificatesCount = i);
-            SetValues(results, (u, i) => u.LostAbsenteeCertificatesCount = i);
-            SetValues(results, (u, i) => u.LostBallotsCount = i);
-			SetValues(results, (u, i) => u.UnaccountedBallotsCount = i);
+            SetValues(results, (u, i) => u.VotersCount = i); // 1
+            SetValues(results, (u, i) => u.ReceivedBallotsCount = i); // 2
+            // SetValues(results, (u, i) => u.EarlyIssuedBallotsCount = i);
+            SetValues(results, (u, i) => u.IssuedInsideBallotsCount = i); // 3
+            SetValues(results, (u, i) => u.IssuedOutsideBallotsCount = i); // 4
+            SetValues(results, (u, i) => u.CanceledBallotsCount = i); // 5
+            SetValues(results, (u, i) => u.OutsideBallotsCount = i); // 6
+            SetValues(results, (u, i) => u.InsideBallotsCount = i); // 7
+            SetValues(results, (u, i) => u.InvalidBallotsCount = i); // 8
+            SetValues(results, (u, i) => u.ValidBallotsCount = i); // 9
+            SetValues(results, (u, i) => u.ReceivedAbsenteeCertificatesCount = i); // 9а
+            SetValues(results, (u, i) => u.IssuedAbsenteeCertificatesCount = i); // 9б
+            SetValues(results, (u, i) => u.AbsenteeCertificateVotersCount = i);  // 9в
+            SetValues(results, (u, i) => u.CanceledAbsenteeCertificatesCount = i); // 9г
+            SetValues(results, (u, i) => u.IssuedByHigherDistrictAbsenteeCertificatesCount = i); // 9д
+            SetValues(results, (u, i) => u.LostAbsenteeCertificatesCount = i); // 9е
+            SetValues(results, (u, i) => u.LostBallotsCount = i); // 9ж
+            SetValues(results, (u, i) => u.UnaccountedBallotsCount = i); // 9з
 			
             foreach (var result in results)
             {

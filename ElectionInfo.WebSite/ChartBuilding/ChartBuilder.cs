@@ -34,7 +34,7 @@ namespace ElectionInfo.WebSite
         protected CharacteristicsDistributionRequest Request { get; private set; }
         protected Chart Item { get; private set; }
 
-        public Stream Image { get; private set; }
+        public MemoryStream Image { get; private set; }
 
         public void Build(ModelContext context)
         {
@@ -51,13 +51,12 @@ namespace ElectionInfo.WebSite
         {
             Item.Height = Request.ChartHeight;
             Item.Width = Request.ChartWidth;
-            Item.ChartAreas.Add(
-                new ChartArea
-                {
-                    AxisX = new Axis { Maximum = 100, Minimum = 0 },
-                    AxisY = new Axis { Maximum = 100, Minimum = 0 },
-                    Position = new ElementPosition(0, 10, 100, 90)
-                });
+            Item.ChartAreas.Add(new ChartArea
+            {
+                AxisX = new Axis { Maximum = 100, Minimum = 0 },
+                AxisY = new Axis { Maximum = 100, Minimum = 0 },
+                Position = new ElementPosition(0, 10, 100, 90)
+            });
             Item.Legends.Add(new Legend { Docking = Docking.Top });
         }
 

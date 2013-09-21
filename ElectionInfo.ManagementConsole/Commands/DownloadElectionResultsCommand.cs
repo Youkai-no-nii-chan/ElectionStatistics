@@ -31,6 +31,10 @@ namespace ElectionInfo.ManagementConsole
             {
                 skipSubUrlsCounts = arguments.Skip(2).Select(int.Parse).ToArray();
             }
+            else
+            {
+                skipSubUrlsCounts = new int[0];
+            }
 
             Console.WriteLine("Начата обработка");
 

@@ -68,7 +68,10 @@
     <input type="button" value="Построить график" id="BuildChartButton"/>
     
     <div id="ChartWrapper">
-        
+        @if (Model.Request.DistributionParameters != null)
+        {
+            @Html.Partial("Chart", Model.Request)
+        }
     </div>
 </section>
 
@@ -132,19 +135,25 @@
             });
 
             $('#BuildChartButton').click(function () {
+                var parameters = 
+                {
+                    ElectionId: $('#@Html.IdFor(model => model.Elections.SelectedId)').val(),
+                    DistrictId: $('.electoral-district-selector[value!=""]').last().val(),
+                    DistributionValue: $('#@Html.IdFor(model => model.DistributionValue)').val(),
+                    DistributionParameters: $('#DistributionParametersWrapper select').val(),
+                    DistributionStepSize: $('#@Html.IdFor(model => model.DistributionStepSize)').val(),
+                    ChartWidth: $('#@Html.IdFor(model => model.ChartWidth)').val(),
+                    ChartHeight: $('#@Html.IdFor(model => model.ChartHeight)').val(),
+                };
+
                 $.get(
                     '@Url.Action("Chart")',
-                    {
-                        ElectionId: $('#@Html.IdFor(model => model.Elections.SelectedId)').val(),
-                        DistrictId: $('.electoral-district-selector[value!=""]').last().val(),
-                        DistributionValue: $('#@Html.IdFor(model => model.DistributionValue)').val(),
-                        DistributionParameters: $('#@Html.IdFor(model => model.DistributionParameters.SelectedIds)').val(),
-                        DistributionStepSize: $('#@Html.IdFor(model => model.DistributionStepSize)').val(),
-                        ChartWidth: $('#@Html.IdFor(model => model.ChartWidth)').val(),
-                        ChartHeight: $('#@Html.IdFor(model => model.ChartHeight)').val(),
-                    },
+                    parameters,
                     function (result) {
                         $('#ChartWrapper').html(result);
+                        
+                        var urlPath = '@Url.Action("Index")?' + $.param(parameters);
+                        window.history.pushState(null, "", urlPath);
                     }
                 );
             });

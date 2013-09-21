@@ -17,6 +17,8 @@ namespace ElectionInfo.WebSite
             DistributionParameters = new DistributionParametersViewModel();
         }
 
+        public CharacteristicsDistributionRequest Request { get; private set; }
+
         public ElectionSelectorViewModel Elections { get; private set; }
         public List<ElectoralDistrictSelectorViewModel> ElectoralDistricts { get; private set; }
 
@@ -32,6 +34,8 @@ namespace ElectionInfo.WebSite
 
         public void LoadData(ModelContext context, CharacteristicsDistributionRequest request)
         {
+            Request = request;
+
             Elections.SelectedId = request.ElectionId;
             Elections.LoadData(context);
 
