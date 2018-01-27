@@ -1,4 +1,12 @@
-﻿using System;
+﻿using ElectionStatistics.Model;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration.FileExtensions;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace ElectionStatistics.ManagementConsole
@@ -14,6 +22,18 @@ namespace ElectionStatistics.ManagementConsole
 
 		static void Main(string[] args)
 		{
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+			IConfigurationRoot configuration = builder.Build();
+
+			var services = new ServiceCollection()
+				.AddLogging()
+				.AddDbContext<ModelContext>(
+					o => o.UseSqlServer(
+						configuration.GetConnectionString("ElectionStatisticsDatabase")));
+
 			try
 			{
 				if (args.Length < 1)
