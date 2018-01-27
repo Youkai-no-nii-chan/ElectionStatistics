@@ -61,12 +61,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ElectionInfo.Model\ElectionInfo.Model.csproj">
-      <Project>{f9f269b3-6a6c-40f5-9456-cb9c7e709d26}</Project>
-      <Name>ElectionInfo.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

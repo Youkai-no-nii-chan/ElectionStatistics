@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElectionStatistics.Model
 {
-    public class ElectionResult
+	[Table("ElectionResults")]
+	public class ElectionResult
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -15,9 +16,9 @@ namespace ElectionStatistics.Model
         public int ElectionId { get; set; }
         public virtual Election Election { get; set; }
 
-        public virtual ICollection<ElectionCandidateVotes> Votes { get; set; }
+        public virtual ICollection<ElectionCandidateVote> Votes { get; set; }
 
-        [Required, StringLength(1000)]
+        [Required, MaxLength(1000)]
         public string DataSourceUrl { get; set; }
 
         /// <summary>

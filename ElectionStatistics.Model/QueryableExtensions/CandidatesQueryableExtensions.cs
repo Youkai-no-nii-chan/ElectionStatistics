@@ -13,7 +13,7 @@ namespace ElectionStatistics.Model
             if (items == null)
                 throw new ArgumentNullException("items");
 
-            return items.Where(candidate => candidate.Elections.Any(election => election.Id == electionId));
+            return items.Where(candidate => candidate.Elections.Any(election => election.ElectionId == electionId));
         }
 
         public static Candidate GetById(this IQueryable<Candidate> items, int candidateId)
