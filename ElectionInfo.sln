@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionInfo.ManagementCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionStatistics.WebSite", "ElectionStatistics.WebSite\ElectionStatistics.WebSite.csproj", "{3EDB3827-AF0B-45B8-A012-2FA7371D5655}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionStatistics.Model", "ElectionStatistics.Model\ElectionStatistics.Model.csproj", "{82C3921D-2D5B-436D-86A5-59DDCC8A7D47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C3921D-2D5B-436D-86A5-59DDCC8A7D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C3921D-2D5B-436D-86A5-59DDCC8A7D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C3921D-2D5B-436D-86A5-59DDCC8A7D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C3921D-2D5B-436D-86A5-59DDCC8A7D47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
