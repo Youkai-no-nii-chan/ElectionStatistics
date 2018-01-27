@@ -4,7 +4,7 @@ namespace ElectionInfo.Model
 {
     public class ModelContext : DbContext
     {
-        public ModelContext() : base("ModelContext")
+        public ModelContext() : base("ElectionStatisticsDatabase")
         {
             Candidates = new CandidatesRepository(this);
             Elections = new ElectionsRepository(this);

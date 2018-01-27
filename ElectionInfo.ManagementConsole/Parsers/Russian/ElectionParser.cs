@@ -35,7 +35,7 @@ namespace ElectionInfo.ManagementConsole
             Reader.MoveTo("<td", out districtNameLine);
             var districtName = districtNameLine.GetTagValue("td");
 
-            District = Context.ElectoralDistricts.GetById(91789); // Context.ElectoralDistricts.GetOrAddByUniqueName(districtName);
+            Context.ElectoralDistricts.GetOrAddByUniqueName(districtName);
 
             Reader.MoveTo("<b>Дата голосования</b>");
             string electionDateLine;
