@@ -17,7 +17,7 @@ namespace ElectionStatistics.Model
 
         public virtual ICollection<ElectionCandidateVotes> Votes { get; set; }
 
-        [Required, StringLength(1000)]
+        [Required, MaxLength(1000)]
         public string DataSourceUrl { get; set; }
 
         /// <summary>

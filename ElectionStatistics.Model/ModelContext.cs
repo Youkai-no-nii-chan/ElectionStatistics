@@ -14,6 +14,16 @@ namespace ElectionStatistics.Model
             ElectionCandidatesVotes = new ElectionCandidatesVotesRepository(this);
         }
 
+	    protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<ElectionCandidate>()
+				.HasKey(c => new { c.ElectionId, c.CandidateId });
+			modelBuilder.Entity<ElectionCandidateVotes>()
+				.HasKey(c => new { c.ElectionResultId, c.CandidateId });
+			modelBuilder.Entity<ElectoralDistrictElection>()
+				.HasKey(c => new { c.ElectionId, c.ElectoralDistrictId });
+		}
+
 	    public CandidatesRepository Candidates { get; private set; }
         public ElectionsRepository Elections { get; private set; }
         public ElectoralDistrictsRepository ElectoralDistricts { get; private set; }

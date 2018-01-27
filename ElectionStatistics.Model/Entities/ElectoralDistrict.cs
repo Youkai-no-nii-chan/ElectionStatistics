@@ -23,13 +23,13 @@ namespace ElectionStatistics.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required, StringLength(500)]
+        [Required, MaxLength(500)]
         public string Name { get; set; }
 
         public int? HigherDistrictId { get; set; }
         public virtual ElectoralDistrict HigherDistrict { get; set; }
 
-        [Column(TypeName = "varchar"), StringLength(100)]
+        [MaxLength(100)]
         public string HierarchyPath { get; set; }
     }
 }

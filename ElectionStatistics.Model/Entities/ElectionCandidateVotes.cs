@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ElectionStatistics.Model
 {
     public class ElectionCandidateVotes
-    {
-        [Key, Column("ElectionResultId", Order = 0)]
-        public int ElectionResultId { get; set; }
+	{
+		[Required]
+		public int ElectionResultId { get; set; }
         public virtual ElectionResult ElectionResult { get; set; }
 
-        [Key, Column("CandidateId", Order = 1)]
-        public int CandidateId { get; set; }
+		[Required]
+		public int CandidateId { get; set; }
         public virtual Candidate Candidate { get; set; }
 
         public int Count { get; set; }
