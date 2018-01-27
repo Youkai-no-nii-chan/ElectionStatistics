@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public static class EnumsHelper
     {

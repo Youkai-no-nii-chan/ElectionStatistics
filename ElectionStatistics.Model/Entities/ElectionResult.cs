@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public class ElectionResult
     {

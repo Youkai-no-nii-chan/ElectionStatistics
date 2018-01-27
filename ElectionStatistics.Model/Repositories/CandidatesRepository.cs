@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public class CandidatesRepository : CachedRepository<Candidate>
     {

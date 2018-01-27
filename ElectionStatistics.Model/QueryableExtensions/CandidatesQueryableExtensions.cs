@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public static class CandidatesQueryableExtensions
     {

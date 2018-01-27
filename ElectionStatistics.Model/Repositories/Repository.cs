@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public abstract class Repository<TEntity> : IQueryable<TEntity> where TEntity : class 
     {

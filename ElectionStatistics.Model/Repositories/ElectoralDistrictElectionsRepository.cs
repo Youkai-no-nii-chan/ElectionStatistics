@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public class ElectoralDistrictElectionsRepository : Repository<ElectoralDistrictElection>
     {

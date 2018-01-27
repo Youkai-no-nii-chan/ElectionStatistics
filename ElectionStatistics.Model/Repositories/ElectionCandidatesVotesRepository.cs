@@ -1,4 +1,4 @@
-﻿namespace ElectionInfo.Model
+﻿namespace ElectionStatistics.Model
 {
     public class ElectionCandidatesVotesRepository : Repository<ElectionCandidateVotes>
     {

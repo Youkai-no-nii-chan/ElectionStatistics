@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public class ModelContext : DbContext
     {

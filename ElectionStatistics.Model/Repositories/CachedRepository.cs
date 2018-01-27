@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ElectionInfo.Model
+namespace ElectionStatistics.Model
 {
     public abstract class CachedRepository<TEntity> : Repository<TEntity> where TEntity : class
     {
