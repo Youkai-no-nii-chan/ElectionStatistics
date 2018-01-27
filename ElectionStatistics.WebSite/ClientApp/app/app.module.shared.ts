@@ -26,7 +26,7 @@ import { CounterComponent } from './components/counter/counter.component';
         CommonModule,
         HttpModule,
 		FormsModule,
-	    MaterialModule,
+		MaterialModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
