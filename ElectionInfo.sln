@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2008
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionInfo.Model", "ElectionInfo.Model\ElectionInfo.Model.csproj", "{F9F269B3-6A6C-40F5-9456-CB9C7E709D26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A434A71D-9142-4AA7-90D7-985E3B9D6108}"
@@ -13,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionInfo.WebSite", "ElectionInfo.WebSite\ElectionInfo.WebSite.csproj", "{E3E115B6-B7DE-488C-8C33-EBDD97AAC041}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionInfo.ManagementConsole", "ElectionInfo.ManagementConsole\ElectionInfo.ManagementConsole.csproj", "{BF6FDC3E-3B6E-4B1B-92A4-CF7BC0A10121}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectionStatistics.WebSite", "ElectionStatistics.WebSite\ElectionStatistics.WebSite.csproj", "{3EDB3827-AF0B-45B8-A012-2FA7371D5655}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +36,16 @@ Global
 		{BF6FDC3E-3B6E-4B1B-92A4-CF7BC0A10121}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF6FDC3E-3B6E-4B1B-92A4-CF7BC0A10121}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF6FDC3E-3B6E-4B1B-92A4-CF7BC0A10121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EDB3827-AF0B-45B8-A012-2FA7371D5655}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCB4B134-C456-48F4-AD9A-93D958353391}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
