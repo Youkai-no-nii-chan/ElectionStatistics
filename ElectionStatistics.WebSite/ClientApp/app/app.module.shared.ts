@@ -1,8 +1,12 @@
+import 'rxjs';
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+
+import { MaterialModule } from './material.module';
 
 import { AppComponent } from './components/app/app.component';
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
@@ -21,7 +25,8 @@ import { CounterComponent } from './components/counter/counter.component';
     imports: [
         CommonModule,
         HttpModule,
-        FormsModule,
+		FormsModule,
+	    MaterialModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
