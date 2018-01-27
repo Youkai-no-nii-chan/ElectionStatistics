@@ -5,4 +5,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ElectionStatistics.Model\ElectionStatistics.Model.csproj" />
+  </ItemGroup>
+
 </Project>
