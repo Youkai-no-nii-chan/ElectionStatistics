@@ -5,8 +5,8 @@ namespace ElectionStatistics.Model
 {
     public static class ElectionCandidatesVotesQueryableExtensions
     {
-        public static IQueryable<ElectionCandidateVotes> ByCandidate(
-            this IQueryable<ElectionCandidateVotes> items,
+        public static IQueryable<ElectionCandidateVote> ByCandidate(
+            this IQueryable<ElectionCandidateVote> items,
             Candidate candidate)
         {
             if (candidate == null)
@@ -15,8 +15,8 @@ namespace ElectionStatistics.Model
             return items.ByCandidate(candidate.Id);
         }
 
-        public static IQueryable<ElectionCandidateVotes> ByCandidate(
-            this IQueryable<ElectionCandidateVotes> items,
+        public static IQueryable<ElectionCandidateVote> ByCandidate(
+            this IQueryable<ElectionCandidateVote> items,
             int candidateId)
         {
             if (items == null)

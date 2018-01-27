@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElectionStatistics.Model
 {
-    public class Candidate
+	[Table("Candidates")]
+	public class Candidate
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

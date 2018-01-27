@@ -25,7 +25,8 @@ namespace ElectionStatistics.WebSite.Controllers
 	            {
 		            Id = election.Id,
 					Name = election.Name
-	            });
+	            })
+				.ToArray();
         }
 
         public class ElectionDto

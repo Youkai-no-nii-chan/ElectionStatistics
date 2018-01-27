@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ElectionStatistics.Model
 {
-    public class ElectionCandidate
+	[Table("ElectionCandidates")]
+	public class ElectionCandidate
 	{
 		[Required]
 		public int ElectionId { get; set; }

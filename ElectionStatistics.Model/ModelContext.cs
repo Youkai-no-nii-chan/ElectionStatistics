@@ -18,7 +18,7 @@ namespace ElectionStatistics.Model
 		{
 			modelBuilder.Entity<ElectionCandidate>()
 				.HasKey(c => new { c.ElectionId, c.CandidateId });
-			modelBuilder.Entity<ElectionCandidateVotes>()
+			modelBuilder.Entity<ElectionCandidateVote>()
 				.HasKey(c => new { c.ElectionResultId, c.CandidateId });
 			modelBuilder.Entity<ElectoralDistrictElection>()
 				.HasKey(c => new { c.ElectionId, c.ElectoralDistrictId });
@@ -57,9 +57,9 @@ namespace ElectionStatistics.Model
             get { return Set<ElectionResult>(); }
         }
 
-        private DbSet<ElectionCandidateVotes> ElectionCandidatesVotesTable
+        private DbSet<ElectionCandidateVote> ElectionCandidatesVotesTable
         {
-            get { return Set<ElectionCandidateVotes>(); }
+            get { return Set<ElectionCandidateVote>(); }
         }
         #endregion
     }
