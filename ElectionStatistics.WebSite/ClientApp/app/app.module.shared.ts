@@ -8,33 +8,35 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './material.module';
 
+import { ElectionsService } from './services/ElectionsService';
+
 import { AppComponent } from './components/app/app.component';
-import { NavMenuComponent } from './components/navmenu/navmenu.component';
-import { HomeComponent } from './components/home/home.component';
-import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
-import { CounterComponent } from './components/counter/counter.component';
+import { NavigationMenuComponent } from './components/NavigationMenuComponent/NavigationMenuComponent';
+import { AboutPage } from './components/AboutPage/AboutPage';
+import { ElectionsSelector } from './components/ElectionsSelector/ElectionsSelector';
 
 @NgModule({
     declarations: [
         AppComponent,
-        NavMenuComponent,
-        CounterComponent,
-        FetchDataComponent,
-        HomeComponent
+	    NavigationMenuComponent,
+	    AboutPage,
+	    ElectionsSelector
     ],
     imports: [
         CommonModule,
         HttpModule,
 		FormsModule,
 		MaterialModule,
-        RouterModule.forRoot([
-            { path: '', redirectTo: 'home', pathMatch: 'full' },
-            { path: 'home', component: HomeComponent },
-            { path: 'counter', component: CounterComponent },
-            { path: 'fetch-data', component: FetchDataComponent },
-            { path: '**', redirectTo: 'home' }
-        ])
-    ]
+	    RouterModule.forRoot([
+		    { path: '', redirectTo: 'about', pathMatch: 'full' },
+		    { path: 'about', component: AboutPage },
+		    { path: 'votes-percentage-distribution', component: ElectionsSelector },
+		    { path: '**', redirectTo: 'about' }
+	    ])
+    ],
+    providers: [
+		ElectionsService
+	],
 })
 export class AppModuleShared {
 }

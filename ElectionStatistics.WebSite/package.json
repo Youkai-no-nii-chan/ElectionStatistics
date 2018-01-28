@@ -30,6 +30,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "@types/webpack-env": "1.13.0",
+    "angular-cache-service": "0.0.8",
     "angular2-template-loader": "0.6.2",
     "aspnet-prerendering": "^3.0.1",
     "aspnet-webpack": "^2.0.1",

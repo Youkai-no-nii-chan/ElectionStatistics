@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-	MatCheckboxModule
+	MatSelectModule
 } from '@angular/material';
 
 @NgModule({
 	exports: [
 		NoopAnimationsModule,
-		MatCheckboxModule
+		MatSelectModule
 	]
 })
 export class MaterialModule {
