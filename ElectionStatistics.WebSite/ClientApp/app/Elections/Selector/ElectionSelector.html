@@ -1,0 +1,7 @@
+﻿<mat-form-field>
+	<mat-select placeholder="Выборы">
+		<mat-option *ngFor="let election of Elections" [value]="election.id">
+			{{ election.name }}
+		</mat-option>
+	</mat-select>
+</mat-form-field>
