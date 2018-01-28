@@ -1,5 +1,5 @@
 ﻿import { Injectable, Inject } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface ElectionDto {
@@ -9,17 +9,14 @@ export interface ElectionDto {
 
 @Injectable()
 export class ElectionsService {
-	private baseUrl: string;
-	private http: Http;
-
-	constructor(http: Http, @Inject('BASE_URL') baseUrl: string) {
-		this.baseUrl = baseUrl;
-		this.http = http;
+	constructor(
+		private httpClient: HttpClient, 
+		@Inject('BASE_URL') private baseUrl: string) {
 	}
 	
 	public getAll(): Observable<ElectionDto[]> {
-		return this.http
+		return this.httpClient
 			.get(this.baseUrl + 'api/elections')
-			.map(result => result.json() as ElectionDto[])
+			.map(result => result as ElectionDto[])
 	}
 }

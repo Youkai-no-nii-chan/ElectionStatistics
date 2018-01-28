@@ -7,21 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ElectionStatistics.WebSite
 {
-    [Route("api/elections")]
-    public class ElectionsController : Controller
+    [Route("api/electoral-districts")]
+    public class ElectoralDistrictsController : Controller
     {
 	    private readonly ModelContext modelContext;
 
-	    public ElectionsController(ModelContext modelContext)
+	    public ElectoralDistrictsController(ModelContext modelContext)
 	    {
 		    this.modelContext = modelContext;
 	    }
 
-	    [HttpGet]
-		public IEnumerable<ElectionDto> GetAll()
+	    [HttpGet("by-election")]
+		public IEnumerable<ElectoralDistrictDto> GetByElection(int electionId)
         {
-            return modelContext.Elections
-				.Select(election => new ElectionDto
+            return modelContext.ElectoralDistricts
+				.ByElection(modelContext, electionId)
+				.Select(election => new ElectoralDistrictDto
 	            {
 		            Id = election.Id,
 					Name = election.Name
@@ -29,7 +30,7 @@ namespace ElectionStatistics.WebSite
 				.ToArray();
         }
 
-        public class ElectionDto
+        public class ElectoralDistrictDto
 		{
 			public int Id { get; set; }
 			public string Name { get; set; }
