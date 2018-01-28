@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ElectionInfo.Model.Entities;
 
 namespace ElectionInfo.Model
 {
@@ -21,6 +22,6 @@ namespace ElectionInfo.Model
         public int ElectoralDistrictId { get; set; }
         public virtual ElectoralDistrict ElectoralDistrict { get; set; }
 
-        public virtual ICollection<Candidate> Candidates { get; set; }
+        public virtual ICollection<ElectionCandidate> Candidates { get; set; }
     }
 }

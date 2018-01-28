@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ElectionInfo.Model.Entities;
 
 namespace ElectionInfo.Model
 {
@@ -20,14 +21,18 @@ namespace ElectionInfo.Model
                     Name = name,
                     ShortName = "ХЗ",
                     GenitiveName = name,
-                    Elections = new Collection<Election>()
+                    Elections = new Collection<ElectionCandidate>()
                 };
                 Add(candidate);
             }
 
-            if (!candidate.Elections.Any(e => e == election))
+            if (!candidate.Elections.Any(e => e.Election == election))
             {
-                candidate.Elections.Add(election);
+                candidate.Elections.Add(new ElectionCandidate
+                {
+	                Candidate = candidate,
+					Election = election
+                });
             }
 
             return candidate;

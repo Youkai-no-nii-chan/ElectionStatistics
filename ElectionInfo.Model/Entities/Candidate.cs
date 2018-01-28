@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ElectionInfo.Model.Entities;
 
 namespace ElectionInfo.Model
 {
@@ -18,6 +19,6 @@ namespace ElectionInfo.Model
         [Required, StringLength(500)]
         public string GenitiveName { get; set; }
 
-        public virtual ICollection<Election> Elections { get; set; }
+        public virtual ICollection<ElectionCandidate> Elections { get; set; }
     }
 }
