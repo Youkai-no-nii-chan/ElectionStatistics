@@ -1,6 +1,0 @@
-﻿@model DistributionParametersViewModel
-
-@if (Model.Items.Length > 0)
-{
-    @Html.ListBoxFor(model => model.SelectedIds, Model.Items, new { size = Model.Items.Length })
-}
