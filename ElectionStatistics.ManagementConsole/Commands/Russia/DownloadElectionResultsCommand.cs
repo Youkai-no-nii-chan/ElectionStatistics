@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using ElectionStatistics.Model;
+using HtmlAgilityPack;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,26 @@ namespace ElectionStatistics.ManagementConsole
 			var vrn = arguments[0];
 
 			var districts =
-				GetDistrictInfo(null, vrn, 3);
+				GetInnerDistricts(null, vrn, 3);
+
+			UploadDistricts(districts, null);
 
 			var results = districts
 				.SelectMany(d => d.InnerDistricts)
 				.SelectMany(d => d.InnerDistricts)
 				.Select(d => new { Name = d.Name, Results = GetElectionResults(d.Vibid) })
 				.ToList();
+		}
+
+		private void UploadDistricts(List<ElectoralDistrictDto> dtos, ElectoralDistrict higherDistrict)
+		{
+			dtos.ForEach(dto =>
+			{
+				var district = new ElectoralDistrict(dto.Name, higherDistrict);
+
+				if (dto.InnerDistricts != null)
+					UploadDistricts(dto.InnerDistricts, district);
+			});
 		}
 
 		private string Get(string uri)
@@ -42,7 +56,7 @@ namespace ElectionStatistics.ManagementConsole
 			return response.Content;
 		}
 
-		private List<ElectoralDistrictDto> GetDistrictInfo(string vibid, string vrn, int maxNestingLevel)
+		private List<ElectoralDistrictDto> GetInnerDistricts(string vibid, string vrn, int maxNestingLevel)
 		{
 			if (maxNestingLevel <= 0)
 				return null;
@@ -65,7 +79,7 @@ namespace ElectionStatistics.ManagementConsole
 				{
 					Name = m.Groups[2].Value,
 					Vibid = m.Groups[1].Value,
-					InnerDistricts = GetDistrictInfo(m.Groups[1].Value, vrn, maxNestingLevel - 1)
+					InnerDistricts = GetInnerDistricts(m.Groups[1].Value, vrn, maxNestingLevel - 1)
 				})
 				.ToList();
 		}
@@ -133,11 +147,7 @@ namespace ElectionStatistics.ManagementConsole
 				}
 
 				for (int j = 0; j < results[i].Count(); j++)
-				{
 					result[j].Votes[metrics[i].Metric] = int.Parse(results[i][j]);
-
-					continue;
-				}
 			}
 
 			return result;
