@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectionStatistics.ManagementConsole
 {
@@ -15,7 +16,7 @@ namespace ElectionStatistics.ManagementConsole
 
 		public override string Name => "Download-ElectionResults";
 
-		public override void Execute(string[] arguments)
+		public override void Execute(IServiceProvider services, string[] arguments)
 		{
 			if (arguments.Length != 1)
 				throw new ArgumentException("arguments.Length != 1");
@@ -25,35 +26,152 @@ namespace ElectionStatistics.ManagementConsole
 			var districts =
 				GetInnerDistricts(null, vrn, 3);
 
-			UploadDistricts(districts, null);
+			var candidateNames = new HashSet<string>();
 
-			var results = districts
-				.SelectMany(d => d.InnerDistricts)
-				.SelectMany(d => d.InnerDistricts)
-				.Select(d => new { Name = d.Name, Results = GetElectionResults(d.Vibid) })
+			foreach (var lowestDistrict in districts.SelectMany(i => GetLowestDistricts(i)))
+			{
+				var districtResults = GetElectionResults(lowestDistrict.Vibid);
+
+				districtResults
+					.ForEach(
+						r => candidateNames.UnionWith(r.Votes.Keys));
+
+				lowestDistrict.InnerDistricts = districtResults
+				.Select(r => new ElectoralDistrictDto
+					{
+						Name = r.ElectoralDistrictName,
+						Results = r
+					})
 				.ToList();
+			}
+
+			using (var modelContext = services.GetService<ModelContext>())
+			{
+				var rootDistrict = modelContext.ElectoralDistricts.GetOrAdd("Россия", null);
+
+				var election = modelContext.Elections.GetOrAdd("Выборы в госдуму 2016", rootDistrict, new DateTime(2016, 09, 18), vrn);
+
+				var candidates = UploadCandidates(modelContext, election, candidateNames);
+				modelContext.SaveChanges();
+
+				UploadDistricts(modelContext, districts, rootDistrict, election, candidates);
+				modelContext.SaveChanges();
+			}
 		}
 
-		private void UploadDistricts(List<ElectoralDistrictDto> dtos, ElectoralDistrict higherDistrict)
+		private IEnumerable<ElectoralDistrictDto> GetLowestDistricts(ElectoralDistrictDto district)
+		{
+			if (district.InnerDistricts == null)
+				return Enumerable.Repeat(district, 1);
+
+			return district.InnerDistricts.SelectMany(i => GetLowestDistricts(i));
+		}
+
+		private Dictionary<string, Candidate> UploadCandidates(
+			ModelContext modelContext, 
+			Election election,
+			IEnumerable<string> candidateNames)
+		{
+			var result = new Dictionary<string, Candidate>();
+
+			foreach (var candidateName in candidateNames)
+			{
+				var candidate = modelContext.Candidates.GetOrAdd(candidateName, election);
+
+				result[candidateName] = candidate;
+			}
+
+			return result;
+		}
+
+		private void UploadDistricts(
+			ModelContext modelContext,
+			List<ElectoralDistrictDto> dtos, 
+			ElectoralDistrict higherDistrict,
+			Election election,
+			Dictionary<string, Candidate> candidates)
 		{
 			dtos.ForEach(dto =>
 			{
 				var district = new ElectoralDistrict(dto.Name, higherDistrict);
 
+				modelContext.ElectoralDistricts.Import(district);
+
 				if (dto.InnerDistricts != null)
-					UploadDistricts(dto.InnerDistricts, district);
+					UploadDistricts(
+						modelContext, 
+						dto.InnerDistricts, 
+						district, 
+						election, 
+						candidates);
+
+				if (dto.Results != null)
+					UploadResults(
+						modelContext,
+						dto.Results,
+						district,
+						election,
+						candidates);
 			});
+		}
+
+		private void UploadResults(
+			ModelContext modelContext,
+			ElectionResultsDto dto,
+			ElectoralDistrict district,
+			Election election,
+			Dictionary<string, Candidate> candidates)
+		{
+			var result = new ElectionResult()
+			{
+				ElectoralDistrict = district,
+				Election = election,
+				DataSourceUrl = "-",
+				VotersCount = dto.VotersCount,
+				ReceivedBallotsCount = dto.ReceivedBallotsCount,
+				EarlyIssuedBallotsCount = dto.EarlyIssuedBallotsCount,
+				IssuedInsideBallotsCount = dto.IssuedInsideBallotsCount,
+				IssuedOutsideBallotsCount = dto.IssuedOutsideBallotsCount,
+				CanceledBallotsCount = dto.CanceledBallotsCount,
+				OutsideBallotsCount = dto.OutsideBallotsCount,
+				InsideBallotsCount = dto.InsideBallotsCount,
+				InvalidBallotsCount = dto.InvalidBallotsCount,
+				ValidBallotsCount = dto.ValidBallotsCount,
+				ReceivedAbsenteeCertificatesCount = dto.ReceivedAbsenteeCertificatesCount,
+				IssuedAbsenteeCertificatesCount = dto.IssuedAbsenteeCertificatesCount,
+				AbsenteeCertificateVotersCount = dto.AbsenteeCertificateVotersCount,
+				CanceledAbsenteeCertificatesCount = dto.CanceledAbsenteeCertificatesCount,
+				IssuedByHigherDistrictAbsenteeCertificatesCount = dto.IssuedByHigherDistrictAbsenteeCertificatesCount,
+				LostAbsenteeCertificatesCount = dto.LostAbsenteeCertificatesCount,
+				LostBallotsCount = dto.LostBallotsCount,
+				UnaccountedBallotsCount = dto.UnaccountedBallotsCount
+			};
+
+			modelContext.ElectionResults.Add(result);
+
+			dto
+				.Votes
+				.ToList()
+				.ForEach(voteDto =>
+				{
+					var vote = new ElectionCandidateVote
+					{
+						ElectionResult = result,
+						Candidate = candidates[voteDto.Key],
+						Count = voteDto.Value
+					};
+
+					modelContext.ElectionCandidatesVotes.Add(vote);
+				});
 		}
 
 		private string Get(string uri)
 		{
 			client.BaseUrl = new Uri(uri);
-
 			var request = new RestRequest(Method.GET);
-
 			var response = client.Execute(request);
-
-			return response.Content;
+			Encoding encoding = Encoding.GetEncoding(1251);
+			return encoding.GetString(response.RawBytes);
 		}
 
 		private List<ElectoralDistrictDto> GetInnerDistricts(string vibid, string vrn, int maxNestingLevel)

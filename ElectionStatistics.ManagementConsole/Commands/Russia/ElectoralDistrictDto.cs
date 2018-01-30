@@ -9,5 +9,6 @@ namespace ElectionStatistics.ManagementConsole
 		public string Name;
 		public string Vibid;
 		public List<ElectoralDistrictDto> InnerDistricts;
+		public ElectionResultsDto Results;
 	}
 }

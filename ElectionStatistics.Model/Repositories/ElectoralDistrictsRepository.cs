@@ -52,7 +52,13 @@ namespace ElectionStatistics.Model
             return district;
         }
 
-        public override void Add(ElectoralDistrict entity)
+		public void Import(ElectoralDistrict entity)
+		{
+			base.Add(entity);
+		}
+
+
+		public override void Add(ElectoralDistrict entity)
         {
             base.Add(entity);
             Context.SaveChanges();

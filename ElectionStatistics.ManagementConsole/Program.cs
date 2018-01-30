@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace ElectionStatistics.ManagementConsole
 {
@@ -32,7 +33,10 @@ namespace ElectionStatistics.ManagementConsole
 				.AddLogging()
 				.AddDbContext<ModelContext>(
 					o => o.UseSqlServer(
-						configuration.GetConnectionString("ElectionStatisticsDatabase")));
+						configuration.GetConnectionString("ElectionStatisticsDatabase")))
+				.BuildServiceProvider();
+
+			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
 			try
 			{
@@ -51,7 +55,7 @@ namespace ElectionStatistics.ManagementConsole
 					}
 					else
 					{
-						command.Execute(args.Skip(1).ToArray());
+						command.Execute(services, args.Skip(1).ToArray());
 						Console.WriteLine("Команда выполнена успешно.");
 					}
 				}

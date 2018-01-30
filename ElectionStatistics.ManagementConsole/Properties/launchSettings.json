@@ -2,7 +2,7 @@
   "profiles": {
     "ElectionStatistics.ManagementConsole": {
       "commandName": "Project",
-      "commandLineArgs": "Download-ElectionResults http://www.vybory.izbirkom.ru/region/izbirkom?action=show&global=1&vrn=100100067795849&region=0&prver=0&pronetvd=0"
+      "commandLineArgs": "Download-ElectionResults 100100067795849"
     }
   }
 }
