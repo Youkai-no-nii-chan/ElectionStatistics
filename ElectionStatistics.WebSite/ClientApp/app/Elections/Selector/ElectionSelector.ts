@@ -11,9 +11,9 @@ export class ElectionSelector {
 
 	public Elections: ElectionDto[];
 
-	ngOnInit() {		
+	ngOnInit() {
 		this.electionsService
 			.getAll()
-			.subscribe(result => { this.Elections = result.json() });
+			.subscribe(elections => { this.Elections = elections });
 	}
 }
