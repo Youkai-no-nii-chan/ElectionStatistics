@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
+const AotPlugin = require('@ngtools/webpack').AotPlugin;
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 
 module.exports = (env) => {
@@ -17,7 +17,7 @@ module.exports = (env) => {
         },
         module: {
             rules: [
-                { test: /\.ts$/, include: /ClientApp/, use: isDevBuild ? ['awesome-typescript-loader?silent=true', 'angular2-template-loader'] : '@ngtools/webpack' },
+                { test: /\.ts$/, use: isDevBuild ? ['awesome-typescript-loader?silent=true', 'angular2-template-loader', 'angular2-router-loader'] : '@ngtools/webpack' },
                 { test: /\.html$/, use: 'html-loader?minimize=false' },
                 { test: /\.css$/, use: [ 'to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
@@ -45,9 +45,9 @@ module.exports = (env) => {
         ] : [
             // Plugins that apply in production builds only
             new webpack.optimize.UglifyJsPlugin(),
-            new AngularCompilerPlugin({
+            new AotPlugin({
                 tsConfigPath: './tsconfig.json',
-                entryModule: path.join(__dirname, 'ClientApp/app/app.module.browser#AppModule'),
+                entryModule: path.join(__dirname, 'ClientApp/app/app.browser.module#AppModule'),
                 exclude: ['./**/*.server.ts']
             })
         ])
@@ -66,9 +66,9 @@ module.exports = (env) => {
             })
         ].concat(isDevBuild ? [] : [
             // Plugins that apply in production builds only
-            new AngularCompilerPlugin({
+            new AotPlugin({
                 tsConfigPath: './tsconfig.json',
-                entryModule: path.join(__dirname, 'ClientApp/app/app.module.server#AppModule'),
+                entryModule: path.join(__dirname, 'ClientApp/app/app.server.module#AppModule'),
                 exclude: ['./**/*.browser.ts']
             })
         ]),
@@ -79,7 +79,6 @@ module.exports = (env) => {
         target: 'node',
         devtool: 'inline-source-map'
     });
-
 
     return [clientBundleConfig, serverBundleConfig];
 };
