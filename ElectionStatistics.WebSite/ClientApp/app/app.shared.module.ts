@@ -9,12 +9,16 @@ import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
 import { ChartsPage } from './Charts/Page/ChartsPage';
 
+import { ElectionsService } from './Elections/ElectionsService';
+import { ElectionSelector } from './Elections/Selector/ElectionSelector';
+
 @NgModule({
     declarations: [
         AppComponent,
         NavMenuComponent,
 	    ChartsPage,
-        HomeComponent
+		HomeComponent,
+	    ElectionSelector
     ],
     imports: [
         CommonModule,
@@ -26,6 +30,9 @@ import { ChartsPage } from './Charts/Page/ChartsPage';
             { path: 'charts', component: ChartsPage },
             { path: '**', redirectTo: 'home' }
         ])
+    ],
+    providers: [
+	    ElectionsService
     ]
 })
 export class AppModuleShared {
