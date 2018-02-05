@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
-import { Layout } from './Layout/Layout';
-import { AboutPage } from './About/AboutPage';
+import { Layout } from './Layout/Component';
+import { AboutPage } from './About/Page';
 import FetchData from './components/FetchData';
 
 export const routes = 
