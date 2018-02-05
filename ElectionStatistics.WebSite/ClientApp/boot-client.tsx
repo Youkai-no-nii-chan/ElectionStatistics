@@ -1,4 +1,5 @@
 import './css/site.css';
+import 'react-select/dist/react-select.css';
 import 'bootstrap';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -7,7 +8,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import configureStore from './configureStore';
-import { ApplicationState }  from './store';
+import { ApplicationState }  from './ApplicationState';
 import * as RoutesModule from './routes';
 let routes = RoutesModule.routes;
 
