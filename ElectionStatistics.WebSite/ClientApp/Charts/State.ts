@@ -5,6 +5,12 @@ import { ElectionsState, electionsActionCreators, Election } from '../Elections/
 
 export interface ChartsState {
     selectedElectionId?: number;
+    showChart?: boolean;
+}
+
+export interface ChartsPageRouteProps{
+    electionId?: number,
+    showChart?: boolean
 }
 
 interface SelectElectionAction {
@@ -12,11 +18,23 @@ interface SelectElectionAction {
     electionId: number;
 }
 
-type KnownAction = SelectElectionAction;
+interface LoadParametersAction {
+    type: 'LOAD_PARAMETERS';
+    stateToLoad: ChartsState;
+}
+
+type KnownAction = SelectElectionAction | LoadParametersAction;
 
 export const chartsActionCreators = {
     ...electionsActionCreators,
-    selectElection: (electionId: number) => <SelectElectionAction>{ type: 'SELECT_ELECTION', electionId: electionId }
+    selectElection: (electionId: number) => <SelectElectionAction>{ type: 'SELECT_ELECTION', electionId: electionId },
+    loadParameters: (routeProps: ChartsPageRouteProps) => <LoadParametersAction>{ 
+        type: 'LOAD_PARAMETERS', 
+        stateToLoad: {
+            selectedElectionId: routeProps.electionId,
+            showChart: routeProps.showChart
+        } 
+    }
 };
 
 export const chartsInitialState: ChartsState = { };
@@ -29,6 +47,13 @@ export const chartsReducer: Reducer<ChartsState> = (state: ChartsState, incoming
                 ...state,
                 selectedElectionId: action.electionId
             };
+        case 'LOAD_PARAMETERS':
+            return {
+                ...state,
+                ...action.stateToLoad
+            };
+        default:
+            const exhaustiveCheck: never = action;
     }
 
     return state || chartsInitialState;

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Link } from 'react-router-dom';
 
 import Select, { Option } from 'react-select';
-import { ChartsState, chartsActionCreators } from './State';
+import { ChartsState, chartsActionCreators, ChartsPageRouteProps } from './State';
 import { ElectionsState } from '../Elections/State';
 import { ApplicationState } from '../ApplicationState';
 import { connect } from 'react-redux';
@@ -17,18 +17,24 @@ interface ChartsPageState {
 type ChartsPageProps = 
     ChartsPageState & 
     typeof chartsActionCreators &
-    RouteComponentProps<{}>
+    RouteComponentProps<ChartsPageRouteProps>
 
 class ChartsPage extends React.Component<ChartsPageProps, {}> {
-    componentWillMount() {
+    public componentWillMount() {
+        this.props.loadParameters(this.props.match.params);
         this.props.requestElections();
     }
 
-    handleChange = (selectedOption: any) => {
-        this.props.selectElection(selectedOption.value)
+    public render() {
+        return (
+            <div>
+                {this.renderSelect()}
+                {this.renderButton()}
+            </div>
+        );
     }
 
-    public render() {
+    private renderSelect() {
         if (!this.props.elections || !this.props.elections.isLoaded) {
             return (
                 <Select
@@ -50,6 +56,47 @@ class ChartsPage extends React.Component<ChartsPageProps, {}> {
             );
         }
     }
+
+    private handleChange = (selectedOption: any) => {
+        this.props.selectElection(selectedOption.value)
+    }
+
+    private renderButton() {
+        let className = "btn btn-primary"
+        let disabled = false;
+        if (this.props.charts.selectedElectionId == null) {
+            className += "btn btn-primary disabled";
+            disabled = true;
+        }
+
+        const queryParams: ChartsPageRouteProps = {
+            electionId: this.props.charts.selectedElectionId,
+            showChart: true
+        }
+
+        return (
+            <Link 
+                className={className}
+                disabled={disabled}
+                to={`/charts?${this.serializeToQueryString(queryParams)}`}>
+                Построить график
+            </Link>
+        );
+    }
+
+    private serializeToQueryString(obj: any, prefix?: string) {
+        const str = new Array<string>();
+        for(const property in obj) {
+          if (obj.hasOwnProperty(property)) {
+            const key = prefix ? prefix + "[" + property + "]" : property;
+            const value = obj[property];
+            str.push((value !== null && typeof value === "object") ?
+              this.serializeToQueryString(value, key) :
+              encodeURIComponent(key) + "=" + encodeURIComponent(value));
+          }
+        }
+        return str.join("&");
+      }
 }
 
 export default connect(
