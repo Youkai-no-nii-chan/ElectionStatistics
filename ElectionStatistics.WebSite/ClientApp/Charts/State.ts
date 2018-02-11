@@ -1,56 +1,63 @@
-import { fetch, addTask } from 'domain-task';
 import { Action, Reducer, ActionCreator } from 'redux';
+import { LOCATION_CHANGE, LocationChangeAction } from 'react-router-redux'
+import * as QueryString from 'query-string'
+
 import { AppThunkAction, LazyItems } from '../ApplicationState';
 import { ElectionsState, electionsActionCreators, Election } from '../Elections/State';
 
 export interface ChartsState {
     selectedElectionId?: number;
+    regionId?: number;
     showChart?: boolean;
 }
 
-export interface ChartsPageRouteProps{
+export interface ChartsPageRouteProps {
     electionId?: number,
     showChart?: boolean
 }
 
 interface SelectElectionAction {
-    type: 'SELECT_ELECTION';
+    type: "SELECT_ELECTION";
     electionId: number;
 }
 
-interface LoadParametersAction {
-    type: 'LOAD_PARAMETERS';
-    stateToLoad: ChartsState;
+interface SelectRegionAction {
+    type: "SELECT_REGION";
+    regionId: number;
 }
 
-type KnownAction = SelectElectionAction | LoadParametersAction;
+type KnownAction = SelectElectionAction | SelectRegionAction;
 
 export const chartsActionCreators = {
     ...electionsActionCreators,
-    selectElection: (electionId: number) => <SelectElectionAction>{ type: 'SELECT_ELECTION', electionId: electionId },
-    loadParameters: (routeProps: ChartsPageRouteProps) => <LoadParametersAction>{ 
-        type: 'LOAD_PARAMETERS', 
-        stateToLoad: {
-            selectedElectionId: routeProps.electionId,
-            showChart: routeProps.showChart
-        } 
-    }
+    selectElection: (electionId: number) => <SelectElectionAction>{ type: "SELECT_ELECTION", electionId: electionId },
+    selectRegion: (regionId: number) => <SelectRegionAction>{ type: "SELECT_REGION", regionId: regionId },
 };
 
 export const chartsInitialState: ChartsState = { };
 
 export const chartsReducer: Reducer<ChartsState> = (state: ChartsState, incomingAction: Action) => {
+    if (incomingAction.type == LOCATION_CHANGE)    {
+        const locationChangeAction = incomingAction as LocationChangeAction;
+        const routeProps = QueryString.parse(locationChangeAction.payload.search) as ChartsPageRouteProps;
+        return {
+            ...state,
+            selectedElectionId: routeProps.electionId,
+            showChart: routeProps.showChart
+        };
+    }
+
     const action = incomingAction as KnownAction;
     switch (action.type) {
-        case 'SELECT_ELECTION':
+        case "SELECT_ELECTION":
             return {
                 ...state,
                 selectedElectionId: action.electionId
             };
-        case 'LOAD_PARAMETERS':
+        case "SELECT_REGION":
             return {
                 ...state,
-                ...action.stateToLoad
+                selectedElectionId: action.regionId
             };
         default:
             const exhaustiveCheck: never = action;

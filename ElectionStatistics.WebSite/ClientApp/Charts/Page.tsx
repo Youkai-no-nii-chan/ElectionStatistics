@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import { RouteComponentProps, Link } from 'react-router-dom';
+import * as QueryString from 'query-string'
 import Select, { Option } from 'react-select';
+import { HighchartComponent } from '../Highchart/Component';
+
 import { ChartsState, chartsActionCreators, ChartsPageRouteProps } from './State';
 import { ElectionsState } from '../Elections/State';
 import { ApplicationState } from '../ApplicationState';
-import { connect } from 'react-redux';
-
 
 interface ChartsPageState {
     elections: ElectionsState,
@@ -19,9 +21,8 @@ type ChartsPageProps =
     typeof chartsActionCreators &
     RouteComponentProps<ChartsPageRouteProps>
 
-class ChartsPage extends React.Component<ChartsPageProps, {}> {
+class ChartsPagePresenter extends React.Component<ChartsPageProps, {}> {
     public componentWillMount() {
-        this.props.loadParameters(this.props.match.params);
         this.props.requestElections();
     }
 
@@ -30,6 +31,7 @@ class ChartsPage extends React.Component<ChartsPageProps, {}> {
             <div>
                 {this.renderSelect()}
                 {this.renderButton()}
+                {this.renderChart()}
             </div>
         );
     }
@@ -78,28 +80,22 @@ class ChartsPage extends React.Component<ChartsPageProps, {}> {
             <Link 
                 className={className}
                 disabled={disabled}
-                to={`/charts?${this.serializeToQueryString(queryParams)}`}>
+                to={{ pathname: "/charts", search: QueryString.stringify(queryParams)}}>
                 Построить график
             </Link>
         );
     }
 
-    private serializeToQueryString(obj: any, prefix?: string) {
-        const str = new Array<string>();
-        for(const property in obj) {
-          if (obj.hasOwnProperty(property)) {
-            const key = prefix ? prefix + "[" + property + "]" : property;
-            const value = obj[property];
-            str.push((value !== null && typeof value === "object") ?
-              this.serializeToQueryString(value, key) :
-              encodeURIComponent(key) + "=" + encodeURIComponent(value));
-          }
+    private renderChart() {
+        if (this.props.charts.showChart) {
+            return <HighchartComponent />;
         }
-        return str.join("&");
-      }
+        else {
+            return null;
+        }
+    }
 }
-
-export default connect(
+export const ChartsPage = connect(
     (state: ApplicationState) => state as ChartsPageState,
-    chartsActionCreators                 // Selects which action creators are merged into the component's props
-)(ChartsPage) as typeof ChartsPage;
+    chartsActionCreators
+)(ChartsPagePresenter) as typeof ChartsPagePresenter;
